@@ -619,28 +619,40 @@ body {
 
 /* TAMPILAN KHUSUS UNTUK HP DAN TABLET (Layar di bawah 768px) */
 @media (max-width: 768px) {
+    .navbar {
+        display: flex;
+        justify-content: space-between; /* Logo di kiri, Hamburger di kanan */
+        align-items: center;
+        padding: 10px 5%;
+        width: 100%;
+        position: relative; /* Penting untuk menu dropdown nanti */
+    }
     .menu-toggle {
-        display: flex; /* Munculkan hamburger menu di HP */
+        display: flex !important; /* Ini kunci agar dia tidak sembunyi */
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        width: 30px;
+        cursor: pointer;
+        z-index: 999; /* Pastikan dia berada di atas elemen lain */
     }
 
     /* Modifikasi kotak navigasi menjadi menu geser dari atas */
     .nav-links {
+        display: none; 
         position: absolute;
-        top: 70px; /* Menyesuaikan tinggi header */
-        left: -100%; /* Sembunyikan di luar layar sebelah kiri */
-        flex-direction: column;
-        background-color: #ffffff;
+        top: 100%; /* Turun ke bawah header */
+        left: 0;
         width: 100%;
-        text-align: center;
-        transition: 0.4s ease-in-out; /* Efek geser mulus */
-        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        flex-direction: column;
         padding: 20px 0;
-        z-index: 999;
+        z-index: 998;
     }
 
-    /* Class ini akan ditambahkan oleh JavaScript saat hamburger diklik */
     .nav-links.active {
-        left: 0; /* Tarik menu ke dalam layar */
+        display: flex; /* Munculkan saat hamburger diklik */
     }
 
     .nav-links li {
@@ -673,6 +685,23 @@ body {
 
     .footer-column {
         width: 100% !important; /* Gunakan lebar penuh layar HP */
+    }
+
+    .logo-container {
+        max-width: 75%; /* Sisakan 25% ruang untuk ikon hamburger */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .logo-img-header {
+        height: 28px; /* Perkecil logo sedikit di HP */
+        width: auto;
+    }
+
+    .logo-text {
+        font-size: 16px; /* Perkecil ukuran font */
+        white-space: nowrap; /* Mencegah teks turun baris */
     }
 }
 
