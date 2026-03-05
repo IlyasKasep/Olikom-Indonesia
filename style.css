@@ -703,6 +703,38 @@ body {
         font-size: 16px; /* Perkecil ukuran font */
         white-space: nowrap; /* Mencegah teks turun baris */
     }
+
+    /* 1. Mengamankan kotak utama agar tidak melebihi layar */
+    .contact-container, 
+    .contact-content, 
+    .contact-info,
+    .contact-map { /* Sesuaikan class ini jika nama div map kamu berbeda */
+        width: 100% !important;
+        max-width: 100%;
+        padding: 15px; /* Kurangi sedikit padding agar lebih lega di HP */
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column; 
+        overflow: hidden; /* Kunci rapat agar tidak ada yang bocor ke samping */
+    }
+
+    /* 2. Memaksa teks yang kepanjangan agar turun baris */
+    .contact-info p, 
+    .contact-info h3, 
+    .contact-info h4 {
+        white-space: normal !important;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* 3. KUNCI UTAMA: Memaksa Peta Google Maps menjadi fleksibel */
+    .contact-content iframe,
+    .contact-map iframe {
+        width: 100% !important; /* Paksa peta menyesuaikan lebar kotak HP */
+        max-width: 100% !important;
+        height: 300px; /* Boleh disesuaikan jika ingin petanya lebih tinggi/pendek */
+        border: none;
+    }
 }
 
 /* --- PENGUNCI LAYAR GLOBAL --- */
