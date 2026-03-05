@@ -621,42 +621,55 @@ body {
 @media (max-width: 768px) {
     .navbar {
         display: flex;
-        justify-content: space-between; /* Logo di kiri, Hamburger di kanan */
+        justify-content: space-between; /* Mendorong elemen ke ujung kiri dan kanan */
         align-items: center;
-        padding: 10px 5%;
         width: 100%;
-        position: relative; /* Penting untuk menu dropdown nanti */
+        padding: 15px 5%; /* Gunakan persentase agar hamburger mepet ke pinggir layar */
+        box-sizing: border-box; /* Mencegah navbar melebihi layar */
     }
     .menu-toggle {
-        display: flex !important; /* Ini kunci agar dia tidak sembunyi */
+        display: flex !important;
         flex-direction: column;
         justify-content: center;
         gap: 5px;
         width: 30px;
         cursor: pointer;
-        z-index: 999; /* Pastikan dia berada di atas elemen lain */
+        z-index: 999;
+        margin-left: auto !important;/* Pastikan tidak ada margin kanan yang menahan */
     }
 
     /* Modifikasi kotak navigasi menjadi menu geser dari atas */
     .nav-links {
         display: none; 
         position: absolute;
-        top: 100%; /* Turun ke bawah header */
+        top: 100%; 
         left: 0;
         width: 100%;
         background-color: #ffffff;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         flex-direction: column;
-        padding: 20px 0;
+        align-items: center; /* Memaksa isi menu ke tengah secara horizontal */
+        padding: 20px 0; /* Ruang atas bawah */
+        margin: 0;
         z-index: 998;
     }
 
     .nav-links.active {
-        display: flex; /* Munculkan saat hamburger diklik */
+        display: flex; 
     }
 
     .nav-links li {
-        margin: 15px 0;
+        width: 100%;
+        text-align: center; /* Mengetengahkan teks */
+        margin: 10px 0;
+        padding: 0; /* Menghilangkan padding kiri bawaan browser */
+        list-style: none; /* Menghapus titik/bullet bawaan */
+    }
+
+    .nav-links a {
+        display: block; /* Membuat area klik penuh selebar layar */
+        width: 100%;
+        font-size: 16px;
     }
 
     /* Sembunyikan tombol 'Hubungi Kami' di header pada mode HP agar tidak sempit */
