@@ -1,0 +1,683 @@
+/* ================= RESET DASAR ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f8f9fa; 
+    color: #333;
+}
+
+/* ================= DESAIN HEADER ================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a365d; 
+}
+
+.logo-text span {
+    color: #007bff; 
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    font-size: 15px;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover, .nav-links li a.active {
+    color: #007bff;
+}
+
+/* --- Desain Tombol Utama --- */
+.btn-primary {
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 24px;
+    border-radius: 50px; 
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); 
+}
+
+/* ================= DESAIN HERO (BANNER) ================= */
+.hero {
+    background: linear-gradient(135deg, rgba(26, 54, 93, 0.9), rgba(0, 123, 255, 0.7)), url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+    height: 85vh; 
+    display: flex;
+    align-items: center;
+    padding: 0 8%;
+}
+
+.hero-content {
+    max-width: 650px; 
+    color: #ffffff;
+    animation: fadeIn 1s ease-in-out; 
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.hero-content h1 span {
+    color: #ffc107; 
+}
+
+.hero-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 35px;
+    color: #e2e8f0; 
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* --- Desain Tombol Kedua (Garis Putih) --- */
+.btn-secondary {
+    text-decoration: none;
+    background-color: transparent;
+    color: #ffffff;
+    padding: 10px 24px;
+    border: 2px solid #ffffff; 
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #ffffff;
+    color: #1a365d; 
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= DESAIN BAGIAN PRODUK ================= */
+.produk-section {
+    padding: 80px 8%;
+    background-color: #f8f9fa;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title h2 {
+    font-size: 32px;
+    color: #1a365d;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.section-title p {
+    color: #555;
+    font-size: 16px;
+}
+
+/* Membuat Kotak-kotak Produk (Grid) */
+.produk-grid {
+    display: grid;
+    /* Ini rahasianya agar otomatis rapi di HP maupun Laptop: */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Desain Kartu Produk */
+.produk-card {
+    background-color: #ffffff;
+    border-radius: 12px; /* Ujung melengkung elegan */
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Bayangan tipis */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efek saat kartu disentuh mouse */
+.produk-card:hover {
+    transform: translateY(-10px); /* Kartu naik sedikit */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.produk-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover; /* Agar gambar tidak gepeng */
+}
+
+.produk-info {
+    padding: 25px;
+    text-align: center;
+}
+
+.produk-info h3 {
+    font-size: 20px;
+    color: #1a365d;
+    margin-bottom: 12px;
+}
+
+.produk-info p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+/* --- Desain Tombol WhatsApp --- */
+.btn-wa {
+    display: block; /* Agar tombol memenuhi lebar kartu */
+    text-decoration: none;
+    background-color: #25D366; /* Warna hijau khas WhatsApp */
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-wa:hover {
+    background-color: #128C7E; /* Hijau WA yang lebih gelap saat disentuh */
+    transform: scale(1.02); /* Membesar sedikit */
+}
+/* ================= DESAIN HALAMAN KATALOG KHUSUS ================= */
+.katalog-page {
+    padding: 60px 8%;
+    background-color: #f8f9fa;
+}
+
+/* Memaksa grid menjadi lebih rapat (4 kolom di layar besar) */
+.katalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+/* Menyesuaikan teks merek dan tipe produk */
+.produk-info .merk {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a365d;
+    margin-bottom: 5px;
+}
+
+.produk-info .tipe {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    height: 45px; /* Menjaga agar tinggi kotak sama rata meski teksnya panjang/pendek */
+}
+
+/* ================= DESAIN FOOTER ================= */
+.footer-custom {
+    background-color: #34495E; /* Warna biru gelap keabu-abuan sesuai gambar */
+    color: #D1D5DB; /* Warna teks abu-abu terang */
+    padding: 70px 8% 60px;
+    margin-top: 50px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footer-container {
+    display: grid;
+    /* Membagi 3 kolom: kiri lebih lebar, tengah sedang, kanan agak lebar */
+    grid-template-columns: 1.2fr 1fr 1.2fr; 
+    gap: 50px;
+}
+
+/* --- Desain Kolom Kiri (Profil & Ikon) --- */
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.logo-img {
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+}
+
+.footer-logo h3 {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.footer-about p {
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+/* Desain Ikon Lingkaran Kiri Bawah */
+.footer-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Garis lingkar tipis */
+    border-radius: 50%;
+    transition: background-color 0.3s, transform 0.3s;
+    text-decoration: none;
+    overflow: hidden; /* Memastikan foto ikon tetap bulat */
+}
+
+.icon-circle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+}
+
+/* Mengatur gambar/foto ikon kamu agar pas di dalam lingkaran */
+.custom-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Agar gambar tidak gepeng */
+}
+
+/* --- Desain Kolom Tengah (Useful Links) --- */
+.footer-links h3, .footer-products h3 {
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links ul li {
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.footer-links ul li a {
+    color: #D1D5DB;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links ul li a:hover {
+    color: #FFFFFF;
+}
+
+.contact-text, .company-text {
+    margin-top: 25px;
+    display: block;
+}
+
+/* --- Desain Kolom Kanan (Produk) --- */
+.footer-products p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #D1D5DB;
+}
+
+/* ================= TOMBOL WHATSAPP MELAYANG ================= */
+.wa-float {
+    position: fixed; /* Membuatnya selalu menempel di layar */
+    bottom: 30px;    /* Jarak dari bawah layar */
+    right: 30px;     /* Jarak dari kanan layar */
+    width: 60px;
+    height: 60px;
+    background-color: #25d366; /* Hijau WhatsApp */
+    border-radius: 50px;       /* Membuatnya bulat sempurna */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+    z-index: 9999; /* Memastikan posisinya selalu di atas elemen lain */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.wa-float:hover {
+    transform: scale(1.1); /* Efek membesar saat disentuh */
+    background-color: #128C7E; /* Warna hijau sedikit menggelap */
+}
+
+.wa-icon {
+    width: 35px;
+    height: 35px;
+    fill: white; /* Mengubah ikon SVG menjadi warna putih */
+}
+
+/* ================= DESAIN KOTAK VISI MISI ================= */
+.visi-misi {
+    margin-top: 35px;
+    background-color: #f8f9fa; /* Warna abu-abu sangat terang */
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 5px solid #007bff; /* Garis aksen biru di sebelah kiri */
+}
+
+.visi-misi h3 {
+    color: #1a365d;
+    font-size: 20px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.visi-misi h3:first-child {
+    margin-top: 0; /* Menghilangkan jarak atas untuk judul Visi */
+}
+
+.visi-misi p {
+    margin-bottom: 0; /* Mengurangi jarak bawah paragraf Visi */
+}
+
+.visi-misi .about-list {
+    margin-top: 10px;
+}
+
+.visi-misi .about-list li {
+    font-size: 14px;
+    font-weight: normal; /* Dibuat normal agar lebih mudah dibaca panjang */
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+/* ================= DESAIN HEADER HALAMAN DALAM (BANNER KECIL) ================= */
+.page-header {
+    background: linear-gradient(135deg, rgba(26, 54, 93, 0.9), rgba(0, 123, 255, 0.8)), url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3') center/cover;
+    padding: 80px 8%;
+    text-align: center;
+    color: white;
+}
+
+.page-header h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.page-header p {
+    font-size: 16px;
+    color: #e2e8f0;
+}
+
+/* ================= DESAIN TENTANG KAMI ================= */
+.about-section {
+    padding: 80px 8%;
+    background-color: #ffffff;
+}
+
+.about-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.about-text h2 {
+    font-size: 32px;
+    color: #1a365d;
+    margin-bottom: 20px;
+}
+
+.about-text h2 span {
+    color: #007bff;
+}
+
+.about-text p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.about-list {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.about-list li {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* ================= DESAIN KONTAK ================= */
+.contact-section {
+    padding: 80px 8%;
+    background-color: #f8f9fa;
+}
+
+.contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+}
+
+.contact-info, .contact-form {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.contact-info h2, .contact-form h2 {
+    font-size: 24px;
+    color: #1a365d;
+    margin-bottom: 20px;
+}
+
+.contact-info p {
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.info-item {
+    margin-bottom: 25px;
+}
+
+.info-item h3 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.info-item p {
+    color: #555;
+    margin-bottom: 0;
+}
+
+.btn-wa-large {
+    display: inline-block;
+    background-color: #25D366;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.btn-wa-large:hover {
+    background-color: #128C7E;
+    transform: translateY(-2px);
+}
+
+/* Desain Form */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Responsif untuk layar kecil / HP */
+@media (max-width: 768px) {
+    .about-container, .contact-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- DESAIN LOGO DI HEADER --- */
+.logo-container {
+    display: flex;
+    align-items: center; /* Membuat gambar dan teks sejajar di tengah */
+    gap: 12px; /* Jarak antara gambar logo dan teks */
+}
+
+.logo-img-header {
+    height: 150px; /* Atur ukuran logo di sini, bisa dibesarkan jadi 50px kalau kurang besar */
+    width: auto;
+    object-fit: contain;
+}
+
+/* ================= RESPONSIVE & HAMBURGER MENU ================= */
+
+/* Sembunyikan ikon hamburger di layar besar (Laptop/PC) */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    z-index: 1000; /* Agar tombol selalu di atas */
+}
+
+.menu-toggle .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #1a365d; /* Warna garis hamburger */
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+/* TAMPILAN KHUSUS UNTUK HP DAN TABLET (Layar di bawah 768px) */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex; /* Munculkan hamburger menu di HP */
+    }
+
+    /* Modifikasi kotak navigasi menjadi menu geser dari atas */
+    .nav-links {
+        position: absolute;
+        top: 70px; /* Menyesuaikan tinggi header */
+        left: -100%; /* Sembunyikan di luar layar sebelah kiri */
+        flex-direction: column;
+        background-color: #ffffff;
+        width: 100%;
+        text-align: center;
+        transition: 0.4s ease-in-out; /* Efek geser mulus */
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        padding: 20px 0;
+        z-index: 999;
+    }
+
+    /* Class ini akan ditambahkan oleh JavaScript saat hamburger diklik */
+    .nav-links.active {
+        left: 0; /* Tarik menu ke dalam layar */
+    }
+
+    .nav-links li {
+        margin: 15px 0;
+    }
+
+    /* Sembunyikan tombol 'Hubungi Kami' di header pada mode HP agar tidak sempit */
+    .desktop-only {
+        display: none;
+    }
+    
+    /* Animasi ajaib: Hamburger berubah jadi tanda "X" saat menu terbuka */
+    .menu-toggle.is-active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .menu-toggle.is-active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle.is-active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+    .footer-container {
+        display: flex;
+        flex-direction: column; /* PAKSA MENUMPUK KE BAWAH agar tidak terpotong */
+        align-items: center;
+        text-align: center;
+        gap: 30px;
+        padding: 40px 20px;
+    }
+
+    .footer-column {
+        width: 100% !important; /* Gunakan lebar penuh layar HP */
+    }
+}
+
+/* --- PENGUNCI LAYAR GLOBAL --- */
+html, body {
+    overflow-x: hidden; /* Hapus kemampuan geser kanan-kiri secara total */
+    width: 100%;
+}
