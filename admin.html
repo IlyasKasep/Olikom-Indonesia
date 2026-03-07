@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Olikom - Kelola Katalog</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h2, h3 { color: #333; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        input[type="file"] { padding: 5px; background: #f9f9f9; cursor: pointer; }
+        button { width: 100%; padding: 12px; background-color: #0056b3; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        button:hover { background-color: #004494; }
+        button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table, th, td { border: 1px solid #ddd; }
+        th, td { padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn-hapus { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; width: auto; font-size: 14px; margin: 0;}
+        .btn-hapus:hover { background-color: #c82333; }
+        .btn-logout { background-color: #6c757d; width: auto; float: right; padding: 8px 15px; font-size: 14px; margin-top: -40px;}
+        .btn-logout:hover { background-color: #5a6268; }
+        #adminPanel { display: none; }
+        #loginPanel { max-width: 400px; }
+        .img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="loginPanel">
+    <h2>🔐 Login Admin Olikom</h2>
+    <form id="formLogin">
+        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" required></div>
+        <div class="form-group"><label>Password</label><input type="password" id="loginPassword" required></div>
+        <button type="submit" id="btnLogin">Masuk</button>
+        <p id="pesanError" style="color: red; text-align: center; font-size: 14px; display: none;">Email/Password salah!</p>
+    </form>
+</div>
+
+<div class="container" id="adminPanel">
+    <h2>🛠️ Panel Admin Olikom</h2>
+    <button class="btn-logout" id="btnLogout">Keluar</button>
+    <p style="text-align: center; color: #666; clear: both;">Tambahkan produk baru (Gambar disimpan via ImgBB gratis)</p>
+
+    <form id="formTambahProduk">
+        <div class="form-group"><label>Nama Produk / Oli</label><input type="text" id="inputNama" required></div>
+        <div class="form-group"><label>Harga</label><input type="text" id="inputHarga" placeholder="Opsional"></div>
+        <div class="form-group"><label>Upload Gambar (JPG/PNG)</label><input type="file" id="inputGambar" accept="image/*" required></div>
+        <div class="form-group"><label>Deskripsi</label><textarea id="inputDeskripsi" rows="3" required></textarea></div>
+        <button type="submit" id="btnSimpan">Simpan Produk</button>
+    </form>
+
+    <hr style="margin: 40px 0;">
+
+    <h3>Daftar Produk Saat Ini</h3>
+    <table>
+        <thead><tr><th>Foto</th><th>Nama Produk</th><th>Harga</th><th>Aksi</th></tr></thead>
+        <tbody id="tabelProduk"><tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr></tbody>
+    </table>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBKznFBiGk9jnXTR3ddRdIlhYuVAduqc80",
+        authDomain: "olikom-indonesia.firebaseapp.com",
+        projectId: "olikom-indonesia",
+        storageBucket: "olikom-indonesia.firebasestorage.app",
+        messagingSenderId: "207771016540",
+        appId: "1:207771016540:web:9679cc56336fddb9077599",
+        measurementId: "G-L1PNVBVJRE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app); 
+
+    // Ini API Key ImgBB kamu yang benar
+    const API_KEY_IMGBB = "cb9b2aec11b80af3765d32f4d6f572da"; 
+
+    const loginPanel = document.getElementById('loginPanel');
+    const adminPanel = document.getElementById('adminPanel');
+    const formLogin = document.getElementById('formLogin');
+    const btnLogout = document.getElementById('btnLogout');
+    const formProduk = document.getElementById('formTambahProduk');
+    const tabel = document.getElementById('tabelProduk');
+
+    // --- KEAMANAN LOGIN ---
+    onAuthStateChanged(auth, (user) => {
+        if (user) { 
+            loginPanel.style.display = "none"; 
+            adminPanel.style.display = "block"; 
+            muatData(); 
+        } else { 
+            loginPanel.style.display = "block"; 
+            adminPanel.style.display = "none"; 
+        }
+    });
+
+    formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)
+            .then(() => formLogin.reset())
+            .catch(() => document.getElementById('pesanError').style.display = "block");
+    });
+
+    btnLogout.addEventListener('click', () => signOut(auth));
+
+    // --- BACA & HAPUS DATA ---
+    async function muatData() {
+        tabel.innerHTML = "<tr><td colspan='4' style='text-align: center;'>Memuat data dari database...</td></tr>";
+        const snapshot = await getDocs(collection(db, "katalog_produk"));
+        tabel.innerHTML = ""; 
+        if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='4' style='text-align: center;'>Katalog masih kosong.</td></tr>";
+        
+        snapshot.forEach((dokumen) => {
+            const data = dokumen.data();
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><img src="${data.gambar}" class="img-preview" alt="Foto Produk"></td>
+                <td><strong>${data.nama}</strong></td>
+                <td>${data.harga}</td>
+                <td><button class="btn-hapus" data-id="${dokumen.id}">Hapus</button></td>
+            `;
+            tabel.appendChild(tr);
+        });
+
+        document.querySelectorAll('.btn-hapus').forEach(btn => btn.addEventListener('click', async (e) => {
+            if(confirm('Yakin ingin menghapus produk ini?')) { 
+                await deleteDoc(doc(db, "katalog_produk", e.target.getAttribute('data-id'))); 
+                muatData(); 
+            }
+        }));
+    }
+
+    // --- UPLOAD GAMBAR & SIMPAN PRODUK ---
+    formProduk.addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+        
+        const btnSimpan = document.getElementById('btnSimpan');
+        btnSimpan.innerText = "Mengupload Gambar... (Tunggu sebentar)"; 
+        btnSimpan.disabled = true;
+
+        try {
+            // 1. Ambil file gambar
+            const fileGambar = document.getElementById('inputGambar').files[0];
+            const formData = new FormData();
+            formData.append("image", fileGambar);
+
+            // 2. Kirim ke server ImgBB
+            const responseImgBB = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY_IMGBB}`, {
+                method: "POST",
+                body: formData
+            });
+            const hasilUpload = await responseImgBB.json();
+            
+            // Cek apakah ImgBB menolak gambar kita
+            if (!hasilUpload.success) {
+                throw new Error(hasilUpload.error.message || "Gambar ditolak oleh sistem");
+            }
+
+            // 3. Ambil Link Gambar dari ImgBB
+            const urlGambar = hasilUpload.data.url;
+            btnSimpan.innerText = "Menyimpan Data Produk...";
+
+            // 4. Simpan ke Firebase Database
+            await addDoc(collection(db, "katalog_produk"), {
+                nama: document.getElementById('inputNama').value,
+                harga: document.getElementById('inputHarga').value || "Hubungi Kami",
+                gambar: urlGambar,
+                deskripsi: document.getElementById('inputDeskripsi').value
+            });
+            
+            alert("Berhasil! Produk dan foto sudah ditambahkan."); 
+            formProduk.reset(); 
+            muatData();   
+
+        } catch (error) { 
+            alert("GAGAL: " + error.message); 
+            console.error(error); 
+        }
+        
+        btnSimpan.innerText = "Simpan Produk"; 
+        btnSimpan.disabled = false;
+    });
+</script>
+</body>
+</html>

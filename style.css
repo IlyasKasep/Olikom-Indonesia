@@ -163,42 +163,120 @@ body {
 }
 
 /* Desain Kartu Produk */
-.produk-card {
-    background-color: #ffffff;
-    border-radius: 12px; /* Ujung melengkung elegan */
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Bayangan tipis */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+
+/* =========================================
+   ANIMASI KARTU KATALOG PRODUK
+   ========================================= */
+   .product-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 280px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    overflow: hidden; /* Mengunci gambar agar tidak keluar dari sudut membulat */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efek halus */
+    cursor: pointer;
 }
 
-/* Efek saat kartu disentuh mouse */
-.produk-card:hover {
-    transform: translateY(-10px); /* Kartu naik sedikit */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+/* 1. Animasi Kartu Terangkat (Pop-Up) */
+.product-card:hover {
+    transform: translateY(-10px); /* Kartu naik 10px */
+    box-shadow: 0 15px 25px rgba(0,0,0,0.15); /* Bayangan membesar */
 }
 
-.produk-card img {
+/* 2. Area Gambar */
+.product-image-container {
+    position: relative;
     width: 100%;
-    height: 220px;
-    object-fit: cover; /* Agar gambar tidak gepeng */
+    height: 250px;
+    overflow: hidden;
 }
 
-.produk-info {
-    padding: 25px;
+/* Jurus Sapu Jagat: Memaksa semua gambar di dalam kartu/grid produk agar seragam */
+.produk-grid img,
+.product-card img,
+.product-img {
+    width: 100% !important;
+    height: 250px !important;
+    object-fit: contain !important;
+    background-color: #ffffff;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Gambar sedikit nge-zoom saat kartu disentuh */
+.product-card:hover .product-img {
+    transform: scale(1.1); 
+}
+
+/* 3. Overlay (Layar Hitam Transparan + Detail) */
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75); /* Warna hitam transparan */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    opacity: 0; /* SEMBUNYIKAN SECARA DEFAULT */
+    transition: opacity 0.3s ease;
     text-align: center;
 }
 
-.produk-info h3 {
-    font-size: 20px;
-    color: #1a365d;
-    margin-bottom: 12px;
+/* Munculkan Overlay saat kartu disentuh */
+.product-card:hover .product-overlay {
+    opacity: 1; 
 }
 
-.produk-info p {
-    color: #666;
+.product-desc {
     font-size: 14px;
-    margin-bottom: 25px;
-    line-height: 1.6;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* 4. Info Teks di Bawah Kartu */
+.product-info {
+    padding: 20px 15px;
+    text-align: center;
+    background: white;
+    position: relative; /* Menjaga teks tetap di atas */
+    z-index: 2;
+}
+
+.product-info h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.product-price {
+    color: #0056b3;
+    font-weight: bold;
+    margin: 0;
+    font-size: 16px;
+}
+
+/* Tombol WA di dalam Overlay */
+.btn-pesan {
+    padding: 10px 20px;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn-pesan:hover {
+    background: #1ebc59;
 }
 
 /* --- Desain Tombol WhatsApp --- */
@@ -244,6 +322,32 @@ body {
     color: #666;
     margin-bottom: 20px;
     height: 45px; /* Menjaga agar tinggi kotak sama rata meski teksnya panjang/pendek */
+}
+
+/* =========================================
+   KOTAK PENCARIAN KATALOG
+   ========================================= */
+   .search-container {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 0 5%;
+}
+
+#inputCari {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 25px; /* Membuat bentuk oval */
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+#inputCari:focus {
+    border-color: #0056b3; /* Berubah warna saat diklik */
+    box-shadow: 0 0 8px rgba(0, 86, 179, 0.2); /* Efek cahaya menyala */
 }
 
 /* ================= DESAIN FOOTER ================= */
