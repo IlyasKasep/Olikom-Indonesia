@@ -602,7 +602,7 @@ body {
 
 /* ================= DESAIN HEADER HALAMAN DALAM ================= */
 .page-header {
-    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3') center/cover;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(0, 0, 0, 0.8)), url('foto/LP1.jpeg') center/cover;
     padding: 80px 8%;
     text-align: center;
     color: var(--kuning-dominan);
