@@ -36,11 +36,28 @@
 
     <section class="hero" id="beranda">
         <div class="hero-content">
-            <h1>Oli Kompresor <span>Terbaik</span> untuk Performa Mesin Anda</h1>
-            <p>Distributor resmi pelumas kompresor industri di Indonesia. Lindungi mesin Anda, tingkatkan efisiensi, dan kurangi biaya perawatan bersama Olikom Indonesia.</p>
+            <h1>Solusi Kompresor <span>Terbaik</span> untuk Performa Mesin Anda</h1>
+            <p>Lebih dari sekadar produk unggulan Oli Kompresor yang menjadi <i>best-seller</i>, Olikom Indonesia juga menyediakan kebutuhan <strong>Sparepart</strong> dan <strong>Unit Mesin Kompresor Udara</strong> terlengkap. Lindungi mesin Anda, tingkatkan efisiensi, dan kurangi biaya perawatan bersama kami.</p>
             <div class="hero-buttons">
                 <a href="katalog.html" class="btn-primary">Lihat Katalog</a>
                 <a href="https://wa.me/6285727250080" target="_blank" class="btn-secondary">Konsultasi Gratis</a>
+            </div>
+        </div>
+
+        <div class="hero-slider-container">
+            <div class="slides">
+                <img src="foto/komresor.jpg" class="slide active" alt="Oli Kompresor">
+                <img src="foto/sparepart.jpg" class="slide" alt="Sparepart Kompresor">
+                <img src="foto/mesin.jpg" class="slide" alt="Unit Mesin Kompresor">
+            </div>
+            
+            <button class="nav-btn prev-btn" onclick="geserSlide(-1)">&#10094;</button>
+            <button class="nav-btn next-btn" onclick="geserSlide(1)">&#10095;</button>
+
+            <div class="slider-dots">
+                <span class="dot active" onclick="pilihSlide(0)"></span>
+                <span class="dot" onclick="pilihSlide(1)"></span>
+                <span class="dot" onclick="pilihSlide(2)"></span>
             </div>
         </div>
     </section>
@@ -128,11 +145,56 @@
         const navLinks = document.querySelector('.nav-links');
 
         mobileMenu.addEventListener('click', () => {
-            // Menambahkan efek "X" pada hamburger
             mobileMenu.classList.toggle('is-active');
-            // Memunculkan atau menyembunyikan menu
             navLinks.classList.toggle('active');
         });
+
+        // --- SKRIP BARU: Slider Foto Interaktif ---
+        let indeksSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let timerSlider;
+
+        // Fungsi untuk menampilkan foto sesuai nomor urutnya
+        function tampilkanSlide(indeks) {
+            // Sembunyikan semua foto dan titik
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // Mengatur agar kalau sudah foto terakhir, balik lagi ke awal
+            indeksSlide = (indeks + slides.length) % slides.length; 
+            
+            // Tampilkan foto dan titik yang sesuai
+            slides[indeksSlide].classList.add('active');
+            dots[indeksSlide].classList.add('active');
+        }
+
+        // Fungsi saat tombol panah ditekan
+        function geserSlide(arah) {
+            tampilkanSlide(indeksSlide + arah);
+            resetTimer(); // Reset waktu agar tidak nabrak saat auto-play
+        }
+
+        // Fungsi saat titik bawah ditekan
+        function pilihSlide(indeks) {
+            tampilkanSlide(indeks);
+            resetTimer();
+        }
+
+        // Auto-play: ganti foto otomatis tiap 5 detik
+        function mulaiTimer() {
+            timerSlider = setInterval(() => {
+                geserSlide(1);
+            }, 5000); 
+        }
+
+        function resetTimer() {
+            clearInterval(timerSlider);
+            mulaiTimer();
+        }
+
+        // Jalankan slider pertama kali
+        mulaiTimer();
     </script>
 </body>
 </html>
