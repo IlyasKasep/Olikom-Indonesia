@@ -143,7 +143,8 @@ body {
 
 .slides {
     position: relative;
-    height: 450px; 
+    height: auto; /* Menghilangkan tinggi fix 450px */
+    aspect-ratio: 1 / 1; /* Membuat kotak sempurna 1:1 */
     width: 100%;
 }
 
@@ -234,7 +235,7 @@ body {
         height: auto; /* Menghilangkan tinggi fix 300px sebelumnya */
         aspect-ratio: 1 / 1; /* Membuat kotak sempurna 1:1 */
         width: 100%;
-    }
+    }   
 }
 
 /* --- Desain Tombol Kedua di Hero --- */
