@@ -1,11 +1,12 @@
-/* ================= VARIABEL WARNA (TEMA INDUSTRI) ================= */
+/* ================= VARIABEL WARNA (TEMA KUNING CERAH & HITAM) ================= */
 :root {
-    --kuning-dominan: #FFC107; /* Kuning Industri yang elegan */
-    --kuning-terang: #FFD54F;
-    --hitam-gelap: #1A1A1A;
-    --hitam-abu: #333333;
+    --kuning-cerah: #FFF200; /* Kuning Cerah dari logo Olikom */
+    --kuning-gelap: #FFD700; /* Kuning gelap untuk efek sentuh */
+    --hitam-gelap: #111111;  /* Hitam Pekat & Elegan */
+    --hitam-abu: #333333;    /* Hitam keabu-abuan untuk teks paragraf */
+    --oranye: #FF8C00;       /* Oranye dari tetesan oli di logo */
     --putih: #FFFFFF;
-    --bg-kuning-pudar: #FFFDF2; /* Background halaman agar tidak terlalu silau */
+    --bg-cerah: #F8F9FA;     /* Background halaman cerah */
 }
 
 /* ================= RESET DASAR ================= */
@@ -17,9 +18,9 @@
 }
 
 body {
-    background-color: var(--bg-kuning-pudar); 
+    background-color: var(--bg-cerah); 
     color: var(--hitam-abu);
-    scroll-behavior: smooth; /* Efek scroll halus */
+    scroll-behavior: smooth; 
 }
 
 /* ================= DESAIN HEADER ================= */
@@ -28,7 +29,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px 8%;
-    background-color: var(--kuning-dominan); /* Navbar Kuning */
+    background-color: var(--kuning-cerah); /* Navbar Kuning Cerah */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
     position: sticky;
     top: 0;
@@ -38,11 +39,11 @@ body {
 .logo-text {
     font-size: 24px;
     font-weight: 700;
-    color: var(--hitam-gelap); 
+    color: var(--hitam-gelap); /* Teks logo Hitam */
 }
 
 .logo-text span {
-    color: var(--putih); /* Atau bisa dibiarkan hitam */
+    color: var(--oranye); /* Kata "Indonesia" warna Oranye */
 }
 
 .nav-links {
@@ -53,8 +54,8 @@ body {
 
 .nav-links li a {
     text-decoration: none;
-    color: var(--hitam-gelap);
-    font-weight: 600;
+    color: var(--hitam-gelap); /* Teks menu Hitam */
+    font-weight: 700;
     font-size: 15px;
     padding: 5px 10px;
     border-radius: 5px;
@@ -62,20 +63,20 @@ body {
 }
 
 .nav-links li a:hover, .nav-links li a.active {
-    color: var(--kuning-dominan);
-    background-color: var(--hitam-gelap);
+    color: var(--kuning-cerah);
+    background-color: var(--hitam-gelap); /* Saat menu disentuh jadi Hitam */
 }
 
-/* --- Desain Tombol Utama (Kuning-Hitam) --- */
+/* --- Desain Tombol Utama --- */
 .btn-primary, .btn-wa, .btn-wa-large, .btn-pesan {
     display: inline-block;
     text-align: center;
     text-decoration: none;
-    background-color: var(--hitam-gelap);
-    color: var(--kuning-dominan);
+    background-color: var(--hitam-gelap); /* Tombol Hitam */
+    color: var(--kuning-cerah); /* Teks Kuning */
     padding: 10px 24px;
     border-radius: 50px; 
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
     border: 2px solid var(--hitam-gelap);
     transition: all 0.3s ease, transform 0.2s ease;
@@ -83,27 +84,26 @@ body {
 }
 
 .btn-primary:hover, .btn-wa:hover, .btn-wa-large:hover, .btn-pesan:hover {
-    background-color: var(--kuning-dominan);
-    color: var(--hitam-gelap);
+    background-color: var(--kuning-cerah); /* Berubah Kuning saat disentuh */
+    color: var(--hitam-gelap); /* Teks jadi Hitam */
     border: 2px solid var(--hitam-gelap);
     transform: translateY(-2px); 
 }
 
 /* ================= DESAIN HERO (BANNER) ================= */
 .hero {
-    /* Kita ganti background-nya menjadi warna solid gelap agar elegan */
-    background-color: #1A1A1A; /* Hitam gelap */
+    background-color: var(--hitam-gelap); /* Background Hitam Pekat */
     min-height: 85vh; 
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Memisahkan teks dan gambar ke kiri-kanan */
+    justify-content: space-between; 
     padding: 0 8%;
-    gap: 40px; /* Jarak antara teks dan slider */
+    gap: 40px; 
 }
 
 .hero-content {
-    flex: 1; /* Mengambil setengah bagian layar */
-    color: #ffffff;
+    flex: 1; 
+    color: var(--putih);
     animation: fadeIn 1s ease-in-out; 
 }
 
@@ -115,7 +115,7 @@ body {
 }
 
 .hero-content h1 span {
-    color: var(--kuning-dominan); 
+    color: var(--kuning-cerah); /* Sorotan Kuning Cerah */
 }
 
 .hero-content p {
@@ -132,18 +132,18 @@ body {
 
 /* --- DESAIN KOTAK SLIDER KANAN --- */
 .hero-slider-container {
-    flex: 1; /* Mengambil setengah bagian layar */
+    flex: 1; 
     position: relative;
     width: 100%;
     max-width: 600px;
-    border-radius: 15px; /* Membuat sudut foto agak melengkung */
+    border-radius: 15px; 
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(255, 193, 7, 0.15); /* Efek bayangan */
+    box-shadow: 0 15px 35px rgba(255, 242, 0, 0.15); /* Bayangan sedikit kuning */
 }
 
 .slides {
     position: relative;
-    height: 450px; /* Tinggi foto slider */
+    height: 450px; 
     width: 100%;
 }
 
@@ -153,9 +153,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Agar foto tidak gepeng */
+    object-fit: cover; 
     opacity: 0;
-    transition: opacity 0.8s ease-in-out; /* Efek transisi halus */
+    transition: opacity 0.8s ease-in-out; 
 }
 
 .slide.active {
@@ -166,8 +166,8 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(255, 193, 7, 0.8); /* Warna Kuning Transparan */
-    color: #1A1A1A;
+    background-color: rgba(255, 242, 0, 0.8); /* Kuning Transparan */
+    color: var(--hitam-gelap);
     border: none;
     width: 45px;
     height: 45px;
@@ -185,7 +185,7 @@ body {
 .next-btn { right: 15px; }
 
 .nav-btn:hover {
-    background-color: #FFC107; /* Kuning Solid saat disentuh */
+    background-color: var(--kuning-cerah); 
 }
 
 .slider-dots {
@@ -208,14 +208,14 @@ body {
 }
 
 .dot.active, .dot:hover {
-    background-color: #FFC107;
-    transform: scale(1.2); /* Titik sedikit membesar saat aktif */
+    background-color: var(--kuning-cerah);
+    transform: scale(1.2); 
 }
 
-/* --- RESPONSIVE UNTUK HP --- */
+/* --- RESPONSIVE UNTUK HP (Slider) --- */
 @media (max-width: 768px) {
     .hero {
-        flex-direction: column; /* Mengubah posisi jadi atas-bawah di HP */
+        flex-direction: column; 
         text-align: center;
         padding-top: 100px;
         padding-bottom: 50px;
@@ -224,9 +224,16 @@ body {
     .hero-buttons {
         justify-content: center;
     }
+
+    .hero-slider-container {
+        width: 100%;
+        max-width: 100%; 
+    }
     
     .slides {
-        height: 300px; /* Tinggi foto lebih pendek di HP */
+        height: auto; /* Menghilangkan tinggi fix 300px sebelumnya */
+        aspect-ratio: 1 / 1; /* Membuat kotak sempurna 1:1 */
+        width: 100%;
     }
 }
 
@@ -234,9 +241,9 @@ body {
 .btn-secondary {
     text-decoration: none;
     background-color: transparent;
-    color: var(--kuning-dominan);
+    color: var(--kuning-cerah);
     padding: 10px 24px;
-    border: 2px solid var(--kuning-dominan); 
+    border: 2px solid var(--kuning-cerah); 
     border-radius: 50px;
     font-weight: 600;
     font-size: 14px;
@@ -244,7 +251,7 @@ body {
 }
 
 .btn-secondary:hover {
-    background-color: var(--kuning-dominan);
+    background-color: var(--kuning-cerah);
     color: var(--hitam-gelap); 
     transform: translateY(-2px);
 }
@@ -257,7 +264,7 @@ body {
 /* ================= DESAIN BAGIAN PRODUK ================= */
 .produk-section {
     padding: 80px 8%;
-    background-color: var(--bg-kuning-pudar);
+    background-color: var(--bg-cerah);
 }
 
 .section-title {
@@ -277,16 +284,12 @@ body {
     font-size: 16px;
 }
 
-/* Membuat Kotak-kotak Produk (Grid) */
 .produk-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
-/* =========================================
-   ANIMASI KARTU KATALOG PRODUK
-   ========================================= */
 .product-card {
     background: var(--putih);
     border: 1px solid #ddd;
@@ -300,7 +303,7 @@ body {
 
 .product-card:hover {
     transform: translateY(-10px); 
-    box-shadow: 0 15px 25px rgba(255, 193, 7, 0.2); /* Bayangan sedikit kuning saat hover */
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15); 
 }
 
 .product-image-container {
@@ -333,7 +336,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(26, 26, 26, 0.85); /* Overlay hitam elegan */
+    background: rgba(17, 17, 17, 0.9); /* Overlay hitam elegan */
     color: var(--putih);
     display: flex;
     flex-direction: column;
@@ -371,14 +374,12 @@ body {
 }
 
 .product-price {
-    color: var(--kuning-dominan); /* Harga warna kuning */
+    color: var(--oranye); /* Harga warna Oranye agar menonjol */
     font-weight: bold;
     margin: 0;
     font-size: 18px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Sedikit bayangan agar terbaca jelas */
 }
 
-/* Modifikasi tombol WA di dalam card agar memenuhi lebar */
 .product-card .btn-wa {
     display: block; 
     width: 100%;
@@ -389,7 +390,7 @@ body {
 /* ================= DESAIN HALAMAN KATALOG KHUSUS ================= */
 .katalog-page {
     padding: 60px 8%;
-    background-color: var(--bg-kuning-pudar);
+    background-color: var(--bg-cerah);
 }
 
 .katalog-grid {
@@ -432,17 +433,17 @@ body {
 }
 
 #inputCari:focus {
-    border-color: var(--kuning-dominan); 
-    box-shadow: 0 0 8px rgba(255, 193, 7, 0.4); 
+    border-color: var(--kuning-cerah); 
+    box-shadow: 0 0 8px rgba(255, 242, 0, 0.4); 
 }
 
 /* ================= DESAIN FOOTER ================= */
 .footer-custom {
-    background-color: var(--hitam-gelap); 
+    background-color: var(--hitam-gelap); /* Footer Hitam Pekat */
     color: var(--putih); 
     padding: 70px 8% 60px;
     margin-top: 50px;
-    border-top: 5px solid var(--kuning-dominan); /* Garis aksen kuning di atas footer */
+    border-top: 5px solid var(--kuning-cerah); /* Garis aksen kuning cerah */
 }
 
 .footer-container {
@@ -465,7 +466,7 @@ body {
 }
 
 .footer-logo h3 {
-    color: var(--kuning-dominan);
+    color: var(--kuning-cerah);
     font-size: 20px;
     font-weight: 700;
 }
@@ -474,7 +475,7 @@ body {
     font-size: 14px;
     line-height: 1.8;
     margin-bottom: 25px;
-    color: #cccccc;
+    color: #e2e8f0;
 }
 
 .footer-icons {
@@ -488,7 +489,7 @@ body {
     justify-content: center;
     width: 40px;
     height: 40px;
-    border: 1px solid var(--kuning-dominan); 
+    border: 1px solid var(--kuning-cerah); 
     border-radius: 50%;
     transition: background-color 0.3s, transform 0.3s;
     text-decoration: none;
@@ -496,7 +497,7 @@ body {
 }
 
 .icon-circle:hover {
-    background-color: var(--kuning-dominan);
+    background-color: var(--kuning-cerah);
     transform: translateY(-3px);
 }
 
@@ -507,7 +508,7 @@ body {
 }
 
 .footer-links h3, .footer-products h3 {
-    color: var(--kuning-dominan);
+    color: var(--kuning-cerah);
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 25px;
@@ -529,23 +530,22 @@ body {
 }
 
 .footer-links ul li a:hover {
-    color: var(--kuning-dominan);
+    color: var(--kuning-cerah);
 }
 
 .contact-text, .company-text {
     margin-top: 25px;
     display: block;
-    color: #cccccc;
+    color: #e2e8f0;
 }
 
 .footer-products p {
     font-size: 14px;
     line-height: 1.8;
-    color: #cccccc;
+    color: #e2e8f0;
 }
 
 /* ================= TOMBOL WHATSAPP MELAYANG ================= */
-/* Dibiarkan hijau agar pelanggan langsung sadar itu tombol WA */
 .wa-float {
     position: fixed; 
     bottom: 30px;    
@@ -579,7 +579,7 @@ body {
     background-color: var(--putih); 
     padding: 25px;
     border-radius: 8px;
-    border-left: 5px solid var(--kuning-dominan); /* Garis aksen kuning */
+    border-left: 5px solid var(--kuning-cerah); /* Garis aksen kuning */
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
@@ -602,10 +602,10 @@ body {
 
 /* ================= DESAIN HEADER HALAMAN DALAM ================= */
 .page-header {
-    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(0, 0, 0, 0.8)), url('foto/LP1.jpeg') center/cover;
+    background: linear-gradient(135deg, rgba(17, 17, 17, 0.9), rgba(0, 0, 0, 0.9)), url('foto/LP1.jpeg') center/cover;
     padding: 80px 8%;
     text-align: center;
-    color: var(--kuning-dominan);
+    color: var(--kuning-cerah);
 }
 
 .page-header h1 {
@@ -638,7 +638,7 @@ body {
 }
 
 .about-text h2 span {
-    color: var(--kuning-dominan);
+    color: var(--oranye);
 }
 
 .about-text p {
@@ -666,7 +666,7 @@ body {
 .marketplace-section {
     padding: 60px 5%;
     text-align: center;
-    background-color: var(--bg-kuning-pudar); 
+    background-color: var(--bg-cerah); 
 }
 
 .marketplace-section .section-title p {
@@ -699,7 +699,7 @@ body {
 
 .marketplace-card:hover {
     transform: translateY(-8px); 
-    box-shadow: 0 12px 20px rgba(255, 193, 7, 0.2);
+    box-shadow: 0 12px 20px rgba(255, 242, 0, 0.2);
 }
 
 .mp-logo {
@@ -724,14 +724,13 @@ body {
 
 .btn-kunjungi:hover { opacity: 0.8; }
 
-/* Warna Tombol Marketplace Dibiarkan Sesuai Brand */
 .tokopedia .btn-kunjungi { background-color: #00AA5B; }
 .shopee .btn-kunjungi { background-color: #EE4D2D; }
 
 /* ================= DESAIN KONTAK ================= */
 .contact-section {
     padding: 80px 8%;
-    background-color: var(--bg-kuning-pudar);
+    background-color: var(--bg-cerah);
 }
 
 .contact-container {
@@ -759,7 +758,6 @@ body {
 .info-item h3 { font-size: 16px; color: var(--hitam-gelap); margin-bottom: 5px; }
 .info-item p { color: var(--hitam-abu); margin-bottom: 0; }
 
-/* Desain Form */
 .form-group { margin-bottom: 20px; }
 .form-group label {
     display: block;
@@ -780,8 +778,8 @@ body {
 
 .form-group input:focus, .form-group textarea:focus {
     outline: none;
-    border-color: var(--kuning-dominan);
-    box-shadow: 0 0 5px rgba(255, 193, 7, 0.3);
+    border-color: var(--kuning-cerah);
+    box-shadow: 0 0 5px rgba(255, 242, 0, 0.3);
 }
 
 /* Responsif untuk layar kecil / HP */
@@ -816,7 +814,7 @@ body {
 .menu-toggle .bar {
     width: 25px;
     height: 3px;
-    background-color: var(--hitam-gelap); /* Garis hamburger hitam */
+    background-color: var(--hitam-gelap); /* Garis hamburger jadi hitam */
     border-radius: 3px;
     transition: all 0.3s ease;
 }
@@ -847,7 +845,7 @@ body {
         top: 100%; 
         left: 0;
         width: 100%;
-        background-color: var(--kuning-dominan);
+        background-color: var(--kuning-cerah);
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         flex-direction: column;
         align-items: center; 
