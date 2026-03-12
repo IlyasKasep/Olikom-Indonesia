@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Olikom - Kelola Katalog</title>
+    <title>Admin Olikom - Kelola Konten</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2, h3 { color: #333; text-align: center; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
@@ -19,26 +19,29 @@
         th, td { padding: 12px; text-align: left; }
         th { background-color: #f2f2f2; }
         
-        /* TOMBOL AKSI DI TABEL */
         .btn-edit { background-color: #ffc107; color: #333; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 5px; width: auto; font-weight: bold;}
         .btn-edit:hover { background-color: #e0a800; }
         .btn-hapus { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; width: auto; font-size: 14px; margin: 0; font-weight: bold;}
         .btn-hapus:hover { background-color: #c82333; }
-        
         .btn-logout { background-color: #6c757d; width: auto; float: right; padding: 8px 15px; font-size: 14px; margin-top: -40px;}
         .btn-logout:hover { background-color: #5a6268; }
+        
         #adminPanel { display: none; }
         #loginPanel { max-width: 400px; }
-        .img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
+        .img-preview { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; }
         
-        /* DESAIN KOTAK PANDUAN */
+        /* --- GAYA UNTUK TAB MENU (PENTING) --- */
+        .tab-container { display: flex; justify-content: center; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab-btn { background: none; border: none; color: #555; padding: 10px 20px; cursor: pointer; font-size: 16px; font-weight: bold; width: auto; border-bottom: 3px solid transparent; border-radius: 0; }
+        .tab-btn:hover { color: #0056b3; }
+        .tab-btn.active { color: #0056b3; border-bottom-color: #0056b3; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        /* -------------------------------------- */
+
         .instruksi-box { background-color: #FFFDF2; border: 2px dashed #FFC107; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; color: #333; }
         .instruksi-box h4 { color: #FF8C00; margin-top: 0; margin-bottom: 10px; font-size: 16px; }
-        .instruksi-box ol { padding-left: 20px; margin-bottom: 0; line-height: 1.6; }
-        .instruksi-box a { color: #007bff; font-weight: bold; text-decoration: none; }
-        .instruksi-box a:hover { text-decoration: underline; }
     </style>
-    <link rel="icon" href="foto/Logo.png" type="image/png">
 </head>
 <body>
 
@@ -58,37 +61,68 @@
     
     <hr style="margin: 30px 0; clear: both;">
 
-    <div class="instruksi-box">
-        <h4>📌 Cara Upload Foto Produk:</h4>
-        <ol>
-            <li>Buka website <b><a href="https://postimages.org/" target="_blank">Postimages.org</a></b> atau <b><a href="https://imgbb.com/" target="_blank">ImgBB.com</a></b>.</li>
-            <li>Upload foto oli/kompresor.</li>
-            <li>Copy link yang berjenis <b>Tautan Langsung (Direct Link)</b> (berakhiran .jpg / .png).</li>
-            <li>Paste link tersebut ke kolom "Link Foto" di bawah.</li>
-        </ol>
+    <div class="tab-container">
+        <button class="tab-btn active" onclick="bukaTab(event, 'katalogTab')">📦 Kelola Katalog Produk</button>
+        <button class="tab-btn" onclick="bukaTab(event, 'artikelTab')">📝 Kelola Artikel Konten</button>
     </div>
 
-    <form id="formTambahProduk">
-        <div class="form-group"><label>Nama Produk / Oli</label><input type="text" id="inputNama" required></div>
-        <div class="form-group"><label>Harga</label><input type="text" id="inputHarga" placeholder="Opsional (misal: Rp 1.500.000)"></div>
-        <div class="form-group"><label>Link Foto (Tautan Langsung)</label><input type="url" id="inputGambar" placeholder="Contoh: https://i.postimg.cc/xyz/foto.jpg" required></div>
-        <div class="form-group"><label>Deskripsi</label><textarea id="inputDeskripsi" rows="3" required></textarea></div>
-        
-        <button type="submit" id="btnSimpan">Simpan Produk Baru</button>
-        <button type="button" id="btnBatalEdit" style="display: none; background-color: #6c757d;">Batal Edit</button>
-    </form>
+    <div id="katalogTab" class="tab-content active">
+        <div class="instruksi-box">
+            <h4>📌 Info Upload Foto Produk:</h4>
+            Gunakan Tautan Langsung (Direct Link) dari <b><a href="https://postimages.org/" target="_blank">Postimages.org</a></b> atau <b>ImgBB</b>.
+        </div>
 
-    <hr style="margin: 40px 0;">
+        <form id="formTambahProduk">
+            <div class="form-group"><label>Nama Produk / Oli</label><input type="text" id="inputNama" required></div>
+            <div class="form-group"><label>Harga</label><input type="text" id="inputHarga" placeholder="Opsional"></div>
+            <div class="form-group"><label>Link Foto (Tautan Langsung)</label><input type="url" id="inputGambar" required></div>
+            <div class="form-group"><label>Deskripsi Singkat</label><textarea id="inputDeskripsi" rows="2" required></textarea></div>
+            <button type="submit" id="btnSimpanProduk">Simpan Produk Baru</button>
+            <button type="button" id="btnBatalEditProduk" style="display: none; background-color: #6c757d;">Batal Edit</button>
+        </form>
 
-    <h3>Daftar Produk Saat Ini</h3>
-    <table>
-        <thead><tr><th>Foto</th><th>Nama Produk</th><th>Harga</th><th>Aksi</th></tr></thead>
-        <tbody id="tabelProduk"><tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr></tbody>
-    </table>
+        <hr style="margin: 40px 0;">
+        <h3>Daftar Produk Saat Ini</h3>
+        <table>
+            <thead><tr><th>Foto</th><th>Nama Produk</th><th>Harga</th><th>Aksi</th></tr></thead>
+            <tbody id="tabelProduk"><tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr></tbody>
+        </table>
+    </div>
+
+    <div id="artikelTab" class="tab-content">
+        <div class="instruksi-box" style="border-color: #17a2b8; background-color: #f8fdfd;">
+            <h4 style="color: #17a2b8;">📌 Tulis Artikel Baru:</h4>
+            Artikel ini akan langsung muncul di halaman beranda (index.html) tepat di bawah produk Best Seller.
+        </div>
+
+        <form id="formTambahArtikel">
+            <div class="form-group"><label>Judul Artikel</label><input type="text" id="inputJudulArtikel" placeholder="Contoh: Manfaat Mengganti Oli Kompresor Tepat Waktu" required></div>
+            <div class="form-group"><label>Link Gambar Sampul Artikel</label><input type="url" id="inputGambarArtikel" placeholder="Gunakan link ImgBB/Postimages" required></div>
+            <div class="form-group"><label>Isi Artikel (Paragraf)</label><textarea id="inputIsiArtikel" rows="8" placeholder="Tulis cerita atau tips di sini..." required></textarea></div>
+            <button type="submit" id="btnSimpanArtikel">Terbitkan Artikel Baru</button>
+            <button type="button" id="btnBatalEditArtikel" style="display: none; background-color: #6c757d;">Batal Edit</button>
+        </form>
+
+        <hr style="margin: 40px 0;">
+        <h3>Daftar Artikel Saat Ini</h3>
+        <table>
+            <thead><tr><th>Sampul</th><th>Judul Artikel</th><th>Tanggal</th><th>Aksi</th></tr></thead>
+            <tbody id="tabelArtikel"><tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr></tbody>
+        </table>
+    </div>
+
 </div>
 
+<script>
+    function bukaTab(event, namaTab) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(namaTab).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+</script>
+
 <script type="module">
-    // Menambahkan updateDoc ke dalam import
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -99,158 +133,180 @@
         projectId: "olikom-indonesia",
         storageBucket: "olikom-indonesia.firebasestorage.app",
         messagingSenderId: "207771016540",
-        appId: "1:207771016540:web:9679cc56336fddb9077599",
-        measurementId: "G-L1PNVBVJRE"
+        appId: "1:207771016540:web:9679cc56336fddb9077599"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app); 
 
-    const loginPanel = document.getElementById('loginPanel');
-    const adminPanel = document.getElementById('adminPanel');
-    const formLogin = document.getElementById('formLogin');
-    const btnLogout = document.getElementById('btnLogout');
-    const formProduk = document.getElementById('formTambahProduk');
-    const tabel = document.getElementById('tabelProduk');
-    
-    // Variabel untuk menyimpan ID produk yang sedang diedit
-    let idEditMode = null; 
+    let idEditProduk = null; 
+    let idEditArtikel = null;
 
     // --- KEAMANAN LOGIN ---
     onAuthStateChanged(auth, (user) => {
         if (user) { 
-            loginPanel.style.display = "none"; 
-            adminPanel.style.display = "block"; 
-            muatData(); 
+            document.getElementById('loginPanel').style.display = "none"; 
+            document.getElementById('adminPanel').style.display = "block"; 
+            muatDataProduk(); 
+            muatDataArtikel(); 
         } else { 
-            loginPanel.style.display = "block"; 
-            adminPanel.style.display = "none"; 
+            document.getElementById('loginPanel').style.display = "block"; 
+            document.getElementById('adminPanel').style.display = "none"; 
         }
     });
 
-    formLogin.addEventListener('submit', (e) => {
+    document.getElementById('formLogin').addEventListener('submit', (e) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)
-            .then(() => formLogin.reset())
+            .then(() => document.getElementById('formLogin').reset())
             .catch(() => document.getElementById('pesanError').style.display = "block");
     });
+    document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
 
-    btnLogout.addEventListener('click', () => signOut(auth));
 
-    // --- BACA, HAPUS, DAN SIAPKAN DATA UNTUK EDIT ---
-    async function muatData() {
-        tabel.innerHTML = "<tr><td colspan='4' style='text-align: center;'>Memuat data dari database...</td></tr>";
+    // ==========================================
+    // BAGIAN 1: KODE PRODUK
+    // ==========================================
+    async function muatDataProduk() {
+        const tabel = document.getElementById('tabelProduk');
+        tabel.innerHTML = "<tr><td colspan='4'>Memuat...</td></tr>";
         const snapshot = await getDocs(collection(db, "katalog_produk"));
         tabel.innerHTML = ""; 
-        if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='4' style='text-align: center;'>Katalog masih kosong.</td></tr>";
+        if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='4'>Katalog kosong.</td></tr>";
         
         snapshot.forEach((dokumen) => {
             const data = dokumen.data();
             const tr = document.createElement("tr");
-            
-            // Perhatikan penambahan data-atribut pada tombol Edit
             tr.innerHTML = `
-                <td><img src="${data.gambar}" class="img-preview" alt="Foto Produk"></td>
+                <td><img src="${data.gambar}" class="img-preview"></td>
                 <td><strong>${data.nama}</strong></td>
                 <td>${data.harga}</td>
                 <td>
-                    <button class="btn-edit" data-id="${dokumen.id}" data-nama="${data.nama}" data-harga="${data.harga}" data-gambar="${data.gambar}" data-deskripsi="${data.deskripsi}">Edit</button>
-                    <button class="btn-hapus" data-id="${dokumen.id}">Hapus</button>
+                    <button class="btn-edit btn-edit-produk" data-id="${dokumen.id}" data-nama="${data.nama}" data-harga="${data.harga}" data-gambar="${data.gambar}" data-deskripsi="${data.deskripsi}">Edit</button>
+                    <button class="btn-hapus btn-hapus-produk" data-id="${dokumen.id}">Hapus</button>
                 </td>
             `;
             tabel.appendChild(tr);
         });
 
-        // Event Listener untuk tombol HAPUS
-        document.querySelectorAll('.btn-hapus').forEach(btn => btn.addEventListener('click', async (e) => {
-            if(confirm('Yakin ingin menghapus produk ini?')) { 
-                await deleteDoc(doc(db, "katalog_produk", e.target.getAttribute('data-id'))); 
-                muatData(); 
-            }
+        document.querySelectorAll('.btn-hapus-produk').forEach(btn => btn.addEventListener('click', async (e) => {
+            if(confirm('Hapus produk ini?')) { await deleteDoc(doc(db, "katalog_produk", e.target.dataset.id)); muatDataProduk(); }
         }));
 
-        // Event Listener untuk tombol EDIT
-        document.querySelectorAll('.btn-edit').forEach(btn => btn.addEventListener('click', (e) => {
-            // Ambil data dari tombol yang diklik
-            const dataset = e.target.dataset;
-            
-            // Masukkan data ke dalam form
-            document.getElementById('inputNama').value = dataset.nama;
-            document.getElementById('inputHarga').value = dataset.harga;
-            document.getElementById('inputGambar').value = dataset.gambar;
-            document.getElementById('inputDeskripsi').value = dataset.deskripsi;
-            
-            // Ubah mode menjadi mode EDIT
-            idEditMode = dataset.id;
-            
-            // Ubah tampilan tombol Simpan
-            const btnSimpan = document.getElementById('btnSimpan');
-            btnSimpan.innerText = "Update Produk";
-            btnSimpan.style.backgroundColor = "#28a745"; // Warna hijau
-            
-            // Tampilkan tombol Batal Edit
-            document.getElementById('btnBatalEdit').style.display = "block";
-            
-            // Scroll otomatis ke atas
+        document.querySelectorAll('.btn-edit-produk').forEach(btn => btn.addEventListener('click', (e) => {
+            const d = e.target.dataset;
+            document.getElementById('inputNama').value = d.nama;
+            document.getElementById('inputHarga').value = d.harga;
+            document.getElementById('inputGambar').value = d.gambar;
+            document.getElementById('inputDeskripsi').value = d.deskripsi;
+            idEditProduk = d.id;
+            document.getElementById('btnSimpanProduk').innerText = "Update Produk";
+            document.getElementById('btnSimpanProduk').style.backgroundColor = "#28a745";
+            document.getElementById('btnBatalEditProduk').style.display = "block";
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }));
     }
 
-    // --- TOMBOL BATAL EDIT ---
-    document.getElementById('btnBatalEdit').addEventListener('click', () => {
-        resetFormState();
+    document.getElementById('btnBatalEditProduk').addEventListener('click', () => {
+        document.getElementById('formTambahProduk').reset();
+        idEditProduk = null;
+        document.getElementById('btnSimpanProduk').innerText = "Simpan Produk Baru";
+        document.getElementById('btnSimpanProduk').style.backgroundColor = "#0056b3";
+        document.getElementById('btnBatalEditProduk').style.display = "none";
     });
 
-    // --- FUNGSI RESET FORM ---
-    function resetFormState() {
-        formProduk.reset();
-        idEditMode = null;
+    document.getElementById('formTambahProduk').addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+        const dataProduk = {
+            nama: document.getElementById('inputNama').value,
+            harga: document.getElementById('inputHarga').value || "Hubungi Kami",
+            gambar: document.getElementById('inputGambar').value,
+            deskripsi: document.getElementById('inputDeskripsi').value
+        };
+        if (idEditProduk) {
+            await updateDoc(doc(db, "katalog_produk", idEditProduk), dataProduk);
+            alert("Produk diupdate!"); 
+        } else {
+            await addDoc(collection(db, "katalog_produk"), dataProduk);
+            alert("Produk ditambahkan!"); 
+        }
+        document.getElementById('btnBatalEditProduk').click();
+        muatDataProduk();
+    });
+
+
+    // ==========================================
+    // BAGIAN 2: KODE ARTIKEL BLOG
+    // ==========================================
+    async function muatDataArtikel() {
+        const tabel = document.getElementById('tabelArtikel');
+        tabel.innerHTML = "<tr><td colspan='4'>Memuat...</td></tr>";
+        const snapshot = await getDocs(collection(db, "artikel_blog"));
+        tabel.innerHTML = ""; 
+        if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='4'>Artikel kosong.</td></tr>";
         
-        const btnSimpan = document.getElementById('btnSimpan');
-        btnSimpan.innerText = "Simpan Produk Baru";
-        btnSimpan.style.backgroundColor = "#0056b3"; // Kembali ke warna biru
-        
-        document.getElementById('btnBatalEdit').style.display = "none";
+        snapshot.forEach((dokumen) => {
+            const data = dokumen.data();
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><img src="${data.gambar}" class="img-preview"></td>
+                <td><strong>${data.judul}</strong></td>
+                <td>${data.tanggal}</td>
+                <td>
+                    <button class="btn-edit btn-edit-artikel" data-id="${dokumen.id}" data-judul="${data.judul}" data-gambar="${data.gambar}" data-isi="${data.isi}">Edit</button>
+                    <button class="btn-hapus btn-hapus-artikel" data-id="${dokumen.id}">Hapus</button>
+                </td>
+            `;
+            tabel.appendChild(tr);
+        });
+
+        document.querySelectorAll('.btn-hapus-artikel').forEach(btn => btn.addEventListener('click', async (e) => {
+            if(confirm('Hapus artikel ini?')) { await deleteDoc(doc(db, "artikel_blog", e.target.dataset.id)); muatDataArtikel(); }
+        }));
+
+        document.querySelectorAll('.btn-edit-artikel').forEach(btn => btn.addEventListener('click', (e) => {
+            const d = e.target.dataset;
+            document.getElementById('inputJudulArtikel').value = d.judul;
+            document.getElementById('inputGambarArtikel').value = d.gambar;
+            document.getElementById('inputIsiArtikel').value = d.isi;
+            idEditArtikel = d.id;
+            document.getElementById('btnSimpanArtikel').innerText = "Update Artikel";
+            document.getElementById('btnSimpanArtikel').style.backgroundColor = "#28a745";
+            document.getElementById('btnBatalEditArtikel').style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }));
     }
 
-    // --- SIMPAN (TAMBAH BARU / UPDATE) ---
-    formProduk.addEventListener('submit', async (e) => {
+    document.getElementById('btnBatalEditArtikel').addEventListener('click', () => {
+        document.getElementById('formTambahArtikel').reset();
+        idEditArtikel = null;
+        document.getElementById('btnSimpanArtikel').innerText = "Terbitkan Artikel Baru";
+        document.getElementById('btnSimpanArtikel').style.backgroundColor = "#0056b3";
+        document.getElementById('btnBatalEditArtikel').style.display = "none";
+    });
+
+    document.getElementById('formTambahArtikel').addEventListener('submit', async (e) => {
         e.preventDefault(); 
-        
-        const btnSimpan = document.getElementById('btnSimpan');
-        btnSimpan.disabled = true;
+        const date = new Date();
+        const tanggalHariIni = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-        try {
-            const dataProduk = {
-                nama: document.getElementById('inputNama').value,
-                harga: document.getElementById('inputHarga').value || "Hubungi Kami",
-                gambar: document.getElementById('inputGambar').value,
-                deskripsi: document.getElementById('inputDeskripsi').value
-            };
+        const dataArtikel = {
+            judul: document.getElementById('inputJudulArtikel').value,
+            gambar: document.getElementById('inputGambarArtikel').value,
+            isi: document.getElementById('inputIsiArtikel').value,
+            tanggal: tanggalHariIni 
+        };
 
-            if (idEditMode) {
-                // JIKA SEDANG DALAM MODE EDIT
-                btnSimpan.innerText = "Mengupdate Data...";
-                const produkRef = doc(db, "katalog_produk", idEditMode);
-                await updateDoc(produkRef, dataProduk); // Fungsi baru untuk Update
-                alert("Berhasil! Data produk sudah diupdate."); 
-            } else {
-                // JIKA MODE TAMBAH BARU
-                btnSimpan.innerText = "Menyimpan Data...";
-                await addDoc(collection(db, "katalog_produk"), dataProduk);
-                alert("Berhasil! Produk baru ditambahkan ke Database."); 
-            }
-            
-            resetFormState(); // Kosongkan form dan kembalikan tombol
-            muatData(); // Refresh tabel
-
-        } catch (error) { 
-            alert("GAGAL: " + error.message); 
-            console.error(error); 
+        if (idEditArtikel) {
+            await updateDoc(doc(db, "artikel_blog", idEditArtikel), dataArtikel);
+            alert("Artikel diupdate!"); 
+        } else {
+            await addDoc(collection(db, "artikel_blog"), dataArtikel);
+            alert("Artikel berhasil diterbitkan!"); 
         }
-        
-        btnSimpan.disabled = false;
+        document.getElementById('btnBatalEditArtikel').click();
+        muatDataArtikel();
     });
 </script>
 </body>

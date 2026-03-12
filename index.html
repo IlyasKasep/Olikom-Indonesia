@@ -9,6 +9,98 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .artikel-section {
+            padding: 80px 8%;
+            background-color: var(--putih); /* Background putih agar beda dari katalog */
+        }
+       /* --- UBAH JADI SLIDER GESER --- */
+       .artikel-grid {
+        display: flex;
+        gap: 25px;
+        margin-top: 40px;
+        padding-bottom: 20px; /* Ruang untuk bayangan kartu */
+        overflow-x: auto; /* Membuatnya bisa digeser ke samping */
+        scroll-snap-type: x mandatory; /* Efek magnet saat berhenti digeser */
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch; /* Agar sangat mulus di HP */
+    }
+
+    /* Desain Scrollbar di Desktop agar elegan (warna kuning) */
+    .artikel-grid::-webkit-scrollbar {
+        height: 8px;
+    }
+    .artikel-grid::-webkit-scrollbar-thumb {
+        background-color: #FFC107; /* Warna kuning Olikom */
+        border-radius: 10px;
+    }
+    .artikel-grid::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+        border-radius: 10px;
+    }
+
+    .artikel-card {
+        flex: 0 0 320px; /* Memaksa lebar kartu tetap 320px */
+        scroll-snap-align: start; /* Magnet menempel di ujung kiri kartu */
+        
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    /* ---------------------------------- */
+        .artikel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px rgba(255, 242, 0, 0.2); /* Sentuhan bayangan kuning olikom */
+        }
+        .artikel-img {
+            width: 100%;
+            height: auto; /* Membiarkan tinggi menyesuaikan layar secara otomatis */
+            aspect-ratio: 16 / 9; /* Membuat rasio bingkai seragam (layar lebar) */
+            object-fit: contain; /* Menampilkan KESELURUHAN foto tanpa ada yang terpotong */
+            background-color: #f8f9fa; /* Memberikan warna latar abu-abu terang jika ukuran foto berbeda-beda */
+            border-bottom: 1px solid #eee; /* Garis batas tipis antara foto dan teks */
+        }
+        .artikel-info {
+            padding: 25px 20px;
+        }
+        .artikel-tanggal {
+            font-size: 13px;
+            color: var(--oranye);
+            font-weight: 700;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .artikel-info h3 {
+            font-size: 20px;
+            color: var(--hitam-gelap);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .artikel-info p {
+            font-size: 14px;
+            color: var(--hitam-abu);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .btn-baca {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--hitam-gelap);
+            text-decoration: none;
+            border-bottom: 2px solid var(--kuning-cerah);
+            padding-bottom: 3px;
+            transition: color 0.3s;
+        }
+        .btn-baca:hover {
+            color: var(--oranye);
+            border-bottom-color: var(--oranye);
+        }
+    </style>
 </head>
 <body>
     <header class="navbar">
@@ -63,51 +155,59 @@
         </div>
     </section>
 
-        <section class="produk-section" id="katalog">
-            <div class="section-title">
-                <h2>Produk Unggulan Kami</h2>
-                <p>Pilihan oli kompresor terbaik untuk performa maksimal mesin industri Anda.</p>
-            </div>
-    
-            <div class="produk-grid">
-                <div class="product-card">
-                    <img src="foto/anjay.avif" alt="Ingersoll Rand Ultra Coolant" class="product-img">
-                    <div class="product-info">
-                        <h3>Ingersoll Rand Ultra Coolant</h3>
-                        <p style="font-size: 14px; margin-bottom: 15px;">Pelumas sintetis berbasis poliglikol yang dirancang khusus untuk mempertahankan performa puncak kompresor udara rotary screw.</p>
-                        <a href="https://wa.me/6285727250080" target="_blank" class="btn-wa">Pesan via WhatsApp</a>
-                    </div>
-                </div>
-    
-                <div class="product-card">
-                    <img src="foto/sullube-Photoroom.png" alt="oil sullair sullube" class="product-img">
-                    <div class="product-info">
-                        <h3>Oil Sullair Sullube 25022-669</h3>
-                        <p style="font-size: 14px; margin-bottom: 15px;">Pelumas sintetis berperforma tinggi berbasis Polyalphaolefin (PAO) yang dirancang khusus untuk kompresor udara rotary screw merek Kaeser.</p>
-                        <a href="https://wa.me/6285727250080" target="_blank" class="btn-wa">Pesan via WhatsApp</a>
-                    </div>
-                </div>
-    
-                <div class="product-card">
-                    <img src="foto/Ndurance.jpeg" alt="atlas copco" class="product-img">
-                    <div class="product-info">
-                        <h3>Atlas Copco Ndurance 1630091800</h3>
-                        <p style="font-size: 14px; margin-bottom: 15px;">Pelumas campuran dari Polyalphaolefin (PAO) dan Ester, memberikan perlindungan optimal pada suhu ekstrem dengan masa pakai hingga 6.000 jam.</p>
-                        <a href="https://wa.me/6285727250080" target="_blank" class="btn-wa">Pesan via WhatsApp</a>
-                    </div>
+    <section class="produk-section" id="katalog">
+        <div class="section-title">
+            <h2>Produk Unggulan Kami</h2>
+            <p>Pilihan oli kompresor terbaik untuk performa maksimal mesin industri Anda.</p>
+        </div>
+        <div class="produk-grid">
+            <div class="product-card">
+                <img src="foto/anjay.avif" alt="Ingersoll Rand Ultra Coolant" class="product-img">
+                <div class="product-info">
+                    <h3>Ingersoll Rand Ultra Coolant</h3>
+                    <p style="font-size: 14px; margin-bottom: 15px;">Pelumas sintetis berbasis poliglikol yang dirancang khusus untuk mempertahankan performa puncak kompresor udara rotary screw.</p>
+                    <a href="https://wa.me/6285727250080" target="_blank" class="btn-wa">Pesan via WhatsApp</a>
                 </div>
             </div>
+
+            <div class="product-card">
+                <img src="foto/sullube-Photoroom.png" alt="oil sullair sullube" class="product-img">
+                <div class="product-info">
+                    <h3>Oil Sullair Sullube 25022-669</h3>
+                    <p style="font-size: 14px; margin-bottom: 15px;">Pelumas sintetis berperforma tinggi berbasis Polyalphaolefin (PAO) yang dirancang khusus untuk kompresor udara rotary screw merek Kaeser.</p>
+                    <a href="https://wa.me/6285727250080" target="_blank" class="btn-wa">Pesan via WhatsApp</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="foto/Ndurance.jpeg" alt="atlas copco" class="product-img">
+                <div class="product-info">
+                    <h3>Atlas Copco Ndurance 1630091800</h3>
+                    <p style="font-size: 14px; margin-bottom: 15px;">Pelumas campuran dari Polyalphaolefin (PAO) dan Ester, memberikan perlindungan optimal pada suhu ekstrem dengan masa pakai hingga 6.000 jam.</p>
+                    <a href="https://wa.me/6285727250080" target="_blank" class="btn-wa">Pesan via WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="artikel-section" id="blog">
+        <div class="section-title">
+            <h2>Artikel & Edukasi Industri</h2>
+            <p>Temukan tips, panduan, dan informasi terbaru seputar perawatan kompresor.</p>
+        </div>
+        
+        <div class="artikel-grid" id="daftarArtikel">
+            <p style="text-align: center; width: 100%; color: #888;">Memuat artikel terbaru...</p>
+        </div>
     </section>
     <footer class="footer-custom">
         <div class="footer-container">
-            
             <div class="footer-about">
                 <div class="footer-logo">
                     <img src="foto/Logo.png" alt="Logo" class="logo-img">
                     <h3>Olikom Indonesia</h3>
                 </div>
                 <p>Olikom Indonesia adalah mitra terpercaya dalam penyediaan solusi kompresor udara screw berkualitas tinggi. Kami berkomitmen mendukung efisiensi operasional industri Anda melalui produk unggulan, layanan purna jual yang sigap, dan ketersediaan suku cadang yang lengkap.</p>
-                
                 <div class="footer-icons">
                     <a href="https://tk.tokopedia.com/ZSu1Ns24s/" class="icon-circle">
                         <img src="foto/Tokopedia.png" alt="Shop Icon" class="custom-icon">
@@ -134,55 +234,44 @@
                     Oli kompresor | Sparepart | Oil Filter | Air Filter | Separator | Prefilter | After Filter | Unit Kompresor Udara | Tanki Udara | Dryer
                 </p>
             </div>
-
         </div>
     </footer>
 
     <a href="https://wa.me/6285727250080" target="_blank" class="wa-float">
-        <svg viewBox="0 0 32 32" class="wa-icon"><path d="M16 2a13 13 0 0 0-11 20l-2 7 7-2a13 13 0 1 0 6-25zm0 24c-2 0-4-1-6-2l-1-1-4 1 1-4-1-1a11 11 0 1 1 11 7zm6-9c0-1-2-1-3-1s-1 0-1 0-1 0-1 1-1 1-1 1-1 0-2-1-2-2-2-2 1-1 1-2v-1c0-1-1-2-2-3s-2 1-2 1-1 1-1 3 2 4 4 6 5 4 7 4 3-1 3-3z"/></svg>
+        <svg viewBox="0 0 32 32" class="wa-icon"><path d="M16 2a13 13 0 0 0-11 20l-2 7 7-2a13 13 0 1 0 6-25zm0 24c-2 0-4-1-6-2l-1-1-4 1 1-4-1-1a11 11 0 1 1 11 7zm6-9c0-1-2-1-3-1s-1 0-1 0-1 0-1 1-1 1-1 3 2 4 4 6 5 4 7 4 3-1 3-3z"/></svg>
     </a>
+
     <script>
         const mobileMenu = document.getElementById('mobile-menu');
         const navLinks = document.querySelector('.nav-links');
-
         mobileMenu.addEventListener('click', () => {
             mobileMenu.classList.toggle('is-active');
             navLinks.classList.toggle('active');
         });
 
-        // --- SKRIP BARU: Slider Foto Interaktif ---
         let indeksSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.dot');
         let timerSlider;
 
-        // Fungsi untuk menampilkan foto sesuai nomor urutnya
         function tampilkanSlide(indeks) {
-            // Sembunyikan semua foto dan titik
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
-            
-            // Mengatur agar kalau sudah foto terakhir, balik lagi ke awal
             indeksSlide = (indeks + slides.length) % slides.length; 
-            
-            // Tampilkan foto dan titik yang sesuai
             slides[indeksSlide].classList.add('active');
             dots[indeksSlide].classList.add('active');
         }
 
-        // Fungsi saat tombol panah ditekan
         function geserSlide(arah) {
             tampilkanSlide(indeksSlide + arah);
-            resetTimer(); // Reset waktu agar tidak nabrak saat auto-play
+            resetTimer(); 
         }
 
-        // Fungsi saat titik bawah ditekan
         function pilihSlide(indeks) {
             tampilkanSlide(indeks);
             resetTimer();
         }
 
-        // Auto-play: ganti foto otomatis tiap 5 detik
         function mulaiTimer() {
             timerSlider = setInterval(() => {
                 geserSlide(1);
@@ -194,8 +283,70 @@
             mulaiTimer();
         }
 
-        // Jalankan slider pertama kali
         mulaiTimer();
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Konfigurasi Firebase milikmu
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKznFBiGk9jnXTR3ddRdIlhYuVAduqc80",
+            authDomain: "olikom-indonesia.firebaseapp.com",
+            projectId: "olikom-indonesia",
+            storageBucket: "olikom-indonesia.firebasestorage.app",
+            messagingSenderId: "207771016540",
+            appId: "1:207771016540:web:9679cc56336fddb9077599"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function muatArtikelKeIndex() {
+            const wadahArtikel = document.getElementById('daftarArtikel');
+            
+            try {
+                const snapshot = await getDocs(collection(db, "artikel_blog"));
+                wadahArtikel.innerHTML = ""; // Kosongkan tulisan 'Memuat...'
+                
+                if(snapshot.empty) {
+                    wadahArtikel.innerHTML = "<p style='text-align: center; width: 100%; color: #888;'>Belum ada artikel yang diterbitkan.</p>";
+                    return;
+                }
+                
+                snapshot.forEach((dokumen) => {
+                    const data = dokumen.data();
+                    
+                    // Memotong teks jika terlalu panjang (Maksimal 120 huruf)
+                    let snippetTeks = data.isi;
+                    if(snippetTeks.length > 120) {
+                        snippetTeks = snippetTeks.substring(0, 120) + "...";
+                    }
+
+                    // Membuat elemen kartu artikel
+                    const kartuHtml = `
+                        <div class="artikel-card">
+                            <img src="${data.gambar}" alt="${data.judul}" class="artikel-img">
+                            <div class="artikel-info">
+                                <span class="artikel-tanggal"><i class="far fa-calendar-alt"></i> ${data.tanggal}</span>
+                                <h3>${data.judul}</h3>
+                                <p>${snippetTeks}</p>
+                            </div>
+                        </div>
+                    `;
+                    // Masukkan kartu ke dalam halaman web
+                    wadahArtikel.innerHTML += kartuHtml;
+                });
+                
+            } catch(error) {
+                console.error("Gagal memuat artikel: ", error);
+                wadahArtikel.innerHTML = "<p style='text-align: center; width: 100%; color: red;'>Gagal memuat artikel. Silakan refresh halaman.</p>";
+            }
+        }
+
+        // Panggil fungsinya saat halaman selesai dimuat
+        muatArtikelKeIndex();
     </script>
 </body>
 </html>
