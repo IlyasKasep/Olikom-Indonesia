@@ -327,7 +327,7 @@
                     // Membuat elemen kartu artikel
                     const kartuHtml = `
                         <div class="artikel-card">
-                            <img src="${data.gambar}" alt="${data.judul}" class="artikel-img">
+                           <div class="artikel-card" style="cursor: pointer;" onclick="window.location.href='artikel.html?id=${dokumen.id}'">
                             <div class="artikel-info">
                                 <span class="artikel-tanggal"><i class="far fa-calendar-alt"></i> ${data.tanggal}</span>
                                 <h3>${data.judul}</h3>
