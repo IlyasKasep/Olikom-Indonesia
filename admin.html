@@ -11,7 +11,6 @@
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
         .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        input[type="file"] { padding: 5px; background: #f9f9f9; cursor: pointer; }
         button { width: 100%; padding: 12px; background-color: #0056b3; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         button:hover { background-color: #004494; }
         button:disabled { background-color: #cccccc; cursor: not-allowed; }
@@ -26,6 +25,13 @@
         #adminPanel { display: none; }
         #loginPanel { max-width: 400px; }
         .img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
+        
+        /* DESAIN KOTAK PANDUAN */
+        .instruksi-box { background-color: #FFFDF2; border: 2px dashed #FFC107; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; color: #333; }
+        .instruksi-box h4 { color: #FF8C00; margin-top: 0; margin-bottom: 10px; font-size: 16px; }
+        .instruksi-box ol { padding-left: 20px; margin-bottom: 0; line-height: 1.6; }
+        .instruksi-box a { color: #007bff; font-weight: bold; text-decoration: none; }
+        .instruksi-box a:hover { text-decoration: underline; }
     </style>
     <link rel="icon" href="foto/Logo.png" type="image/png">
 </head>
@@ -44,12 +50,24 @@
 <div class="container" id="adminPanel">
     <h2>🛠️ Panel Admin Olikom</h2>
     <button class="btn-logout" id="btnLogout">Keluar</button>
-    <p style="text-align: center; color: #666; clear: both;">Tambahkan produk baru (Gambar disimpan via ImgBB gratis)</p>
+    
+    <hr style="margin: 30px 0; clear: both;">
+
+    <div class="instruksi-box">
+        <h4>📌 Cara Upload Foto Produk:</h4>
+        <ol>
+            <li>Buka website <b><a href="https://imgbb.com/" target="_blank">ImgBB.com</a></b> (Klik link ini).</li>
+            <li>Klik tombol <b>Mulai Mengunggah</b> dan pilih foto oli/kompresor dari komputermu.</li>
+            <li>Klik <b>Unggah</b>.</li>
+            <li>Di bagian "Kode Sematan" (Embed Codes), pilih <b>Tautan Langsung (Direct Link)</b>.</li>
+            <li><b>Copy (Salin)</b> link tersebut, lalu <b>Paste (Tempel)</b> di kolom "Link Foto dari ImgBB" di bawah.</li>
+        </ol>
+    </div>
 
     <form id="formTambahProduk">
         <div class="form-group"><label>Nama Produk / Oli</label><input type="text" id="inputNama" required></div>
         <div class="form-group"><label>Harga</label><input type="text" id="inputHarga" placeholder="Opsional"></div>
-        <div class="form-group"><label>Upload Gambar (JPG/PNG)</label><input type="file" id="inputGambar" accept="image/*" required></div>
+        <div class="form-group"><label>Link Foto dari ImgBB (Tautan Langsung)</label><input type="url" id="inputGambar" placeholder="Contoh: https://i.ibb.co/xyz123/foto.jpg" required></div>
         <div class="form-group"><label>Deskripsi</label><textarea id="inputDeskripsi" rows="3" required></textarea></div>
         <button type="submit" id="btnSimpan">Simpan Produk</button>
     </form>
@@ -68,6 +86,7 @@
     import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
+    // Konfigurasi Firebase kamu (Tetap aman & tidak diubah)
     const firebaseConfig = {
         apiKey: "AIzaSyBKznFBiGk9jnXTR3ddRdIlhYuVAduqc80",
         authDomain: "olikom-indonesia.firebaseapp.com",
@@ -81,9 +100,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app); 
-
-    // Ini API Key ImgBB kamu yang benar
-    const API_KEY_IMGBB = "cb9b2aec11b80af3765d32f4d6f572da"; 
 
     const loginPanel = document.getElementById('loginPanel');
     const adminPanel = document.getElementById('adminPanel');
@@ -140,37 +156,19 @@
         }));
     }
 
-    // --- UPLOAD GAMBAR & SIMPAN PRODUK ---
+    // --- SIMPAN PRODUK DENGAN LINK IMGBB ---
     formProduk.addEventListener('submit', async (e) => {
         e.preventDefault(); 
         
         const btnSimpan = document.getElementById('btnSimpan');
-        btnSimpan.innerText = "Mengupload Gambar... (Tunggu sebentar)"; 
+        btnSimpan.innerText = "Menyimpan Data... (Tunggu sebentar)"; 
         btnSimpan.disabled = true;
 
         try {
-            // 1. Ambil file gambar
-            const fileGambar = document.getElementById('inputGambar').files[0];
-            const formData = new FormData();
-            formData.append("image", fileGambar);
+            // Ambil link gambar langsung dari form input teks
+            const urlGambar = document.getElementById('inputGambar').value;
 
-            // 2. Kirim ke server ImgBB
-            const responseImgBB = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY_IMGBB}`, {
-                method: "POST",
-                body: formData
-            });
-            const hasilUpload = await responseImgBB.json();
-            
-            // Cek apakah ImgBB menolak gambar kita
-            if (!hasilUpload.success) {
-                throw new Error(hasilUpload.error.message || "Gambar ditolak oleh sistem");
-            }
-
-            // 3. Ambil Link Gambar dari ImgBB
-            const urlGambar = hasilUpload.data.url;
-            btnSimpan.innerText = "Menyimpan Data Produk...";
-
-            // 4. Simpan ke Firebase Database
+            // Simpan ke Firebase Database
             await addDoc(collection(db, "katalog_produk"), {
                 nama: document.getElementById('inputNama').value,
                 harga: document.getElementById('inputHarga').value || "Hubungi Kami",
@@ -178,7 +176,7 @@
                 deskripsi: document.getElementById('inputDeskripsi').value
             });
             
-            alert("Berhasil! Produk dan foto sudah ditambahkan."); 
+            alert("Berhasil! Produk dan foto sudah ditambahkan ke Database."); 
             formProduk.reset(); 
             muatData();   
 
