@@ -75,9 +75,18 @@
         <form id="formTambahProduk">
             <div class="form-group"><label>Nama Produk / Oli</label><input type="text" id="inputNama" required></div>
             
-            <div class="form-group"><label>Deskripsi Produk</label><textarea id="inputDeskripsi" rows="3" required></textarea></div>
+            <div class="form-group">
+                <label>Kategori Produk</label>
+                <select id="inputKategori" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; cursor: pointer;" required>
+                    <option value="" disabled selected>-- Pilih Kategori --</option>
+                    <option value="Oli">Oli Kompresor</option>
+                    <option value="Sparepart">Sparepart / Filter</option>
+                    <option value="Mesin">Unit Mesin</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Deskripsi Singkat</label><textarea id="inputDeskripsi" rows="2" required></textarea></div>
+            <div class="form-group"><label>Link Foto (Tautan Langsung)</label><input type="url" id="inputGambar" required></div>
             
-            <div class="form-group"><label>Link Foto</label><input type="url" id="inputGambar" required></div>
             <button type="submit" id="btnSimpanProduk">Simpan Produk Baru</button>
             <button type="button" id="btnBatalEditProduk" style="display: none; background-color: #6c757d;">Batal Edit</button>
         </form>
@@ -167,12 +176,11 @@
 
 
     // ==========================================
-    // BAGIAN 1: KODE PRODUK
+    // BAGIAN 1: KODE PRODUK (DENGAN KATEGORI & DESKRIPSI)
     // ==========================================
     async function muatDataProduk() {
         const tabel = document.getElementById('tabelProduk');
-        // Sesuaikan header tabel karena kolom harga sudah hilang
-        document.querySelector('#katalogTab thead').innerHTML = "<tr><th>Foto</th><th>Nama & Deskripsi</th><th>Aksi</th></tr>";
+        document.querySelector('#katalogTab thead').innerHTML = "<tr><th>Foto</th><th>Nama, Kategori & Deskripsi</th><th>Aksi</th></tr>";
         
         tabel.innerHTML = "<tr><td colspan='3'>Memuat...</td></tr>";
         const snapshot = await getDocs(collection(db, "katalog_produk"));
@@ -183,17 +191,18 @@
             const data = dokumen.data();
             const tr = document.createElement("tr");
             
-            // Ambil deskripsi (D besar atau d kecil)
             const deskripsiProduk = data.Deskripsi || data.deskripsi || "";
+            const kategoriProduk = data.kategori || "Belum ada kategori"; // Ambil kategori
 
             tr.innerHTML = `
                 <td><img src="${data.gambar}" class="img-preview"></td>
                 <td>
-                    <strong>${data.nama}</strong><br>
+                    <strong>${data.nama}</strong> 
+                    <span style="background: #FFC107; color: #222; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-left: 5px;">${kategoriProduk}</span><br>
                     <span style="font-size: 13px; color: #666;">${deskripsiProduk}</span>
                 </td>
                 <td>
-                    <button class="btn-edit btn-edit-produk" data-id="${dokumen.id}" data-nama="${data.nama}" data-gambar="${data.gambar}" data-deskripsi="${deskripsiProduk}">Edit</button>
+                    <button class="btn-edit btn-edit-produk" data-id="${dokumen.id}" data-nama="${data.nama}" data-gambar="${data.gambar}" data-deskripsi="${deskripsiProduk}" data-kategori="${kategoriProduk}">Edit</button>
                     <button class="btn-hapus btn-hapus-produk" data-id="${dokumen.id}">Hapus</button>
                 </td>
             `;
@@ -209,6 +218,12 @@
             document.getElementById('inputNama').value = d.nama;
             document.getElementById('inputGambar').value = d.gambar;
             document.getElementById('inputDeskripsi').value = d.deskripsi;
+            
+            // Set kategori di dropdown saat mode edit
+            const dropdownKategori = document.getElementById('inputKategori');
+            if(dropdownKategori) {
+                dropdownKategori.value = d.kategori === "Belum ada kategori" ? "" : d.kategori;
+            }
             
             idEditProduk = d.id;
             document.getElementById('btnSimpanProduk').innerText = "Update Produk";
@@ -229,7 +244,6 @@
     document.getElementById('formTambahProduk').addEventListener('submit', async (e) => {
         e.preventDefault(); 
         
-        // Ubah teks tombol agar admin tahu sedang proses
         const btnSimpan = document.getElementById('btnSimpanProduk');
         const teksAsli = btnSimpan.innerText;
         btnSimpan.innerText = "Menyimpan...";
@@ -238,7 +252,8 @@
         const dataProduk = {
             nama: document.getElementById('inputNama').value,
             gambar: document.getElementById('inputGambar').value,
-            Deskripsi: document.getElementById('inputDeskripsi').value // Pakai 'D' besar sesuai databasemu
+            Deskripsi: document.getElementById('inputDeskripsi').value,
+            kategori: document.getElementById('inputKategori').value // Simpan data kategori
         };
 
         try {

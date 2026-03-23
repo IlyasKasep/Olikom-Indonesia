@@ -62,8 +62,15 @@
             <p style="text-align: center; color: #666; margin-bottom: 30px;">Temukan spesifikasi oli kompresor yang paling tepat untuk kebutuhan mesin industri Anda.</p>
         </div>
 
-        <div class="search-container" style="max-width: 600px; margin: 0 auto 40px auto;">
-            <input type="text" id="inputCari" placeholder="🔍 Cari nama oli atau produk di sini..." autocomplete="off" style="width: 100%; padding: 12px 20px; border-radius: 30px; border: 1px solid #ccc; font-family: 'Poppins', sans-serif;">
+        <div class="search-container" style="max-width: 800px; margin: 0 auto 40px auto; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <input type="text" id="inputCari" placeholder="🔍 Cari nama produk di sini..." autocomplete="off" style="flex: 1; min-width: 250px; padding: 12px 20px; border-radius: 30px; border: 1px solid #ccc; font-family: 'Poppins', sans-serif;">
+            
+            <select id="filterKategori" style="padding: 12px 20px; border-radius: 30px; border: 1px solid #ccc; font-family: 'Poppins', sans-serif; cursor: pointer; outline: none; background: #fff;">
+                <option value="Semua">Semua Kategori</option>
+                <option value="Oli">Oli Kompresor</option>
+                <option value="Sparepart">Sparepart / Filter</option>
+                <option value="Mesin">Unit Mesin</option>
+            </select>
         </div>
 
         <div class="katalog-grid" id="wadahKatalog">
@@ -147,12 +154,16 @@
                     const data = dokumen.data();
                     const kotakProduk = document.createElement("div");
                     
-                    // Ini class CSS-nya agar dikenali oleh fitur pencarian
+                    // Masukkan kategori ke 'data-kategori' agar bisa dibaca oleh sistem filter
+                    const kategoriProduk = data.kategori || "Tidak Ada";
                     kotakProduk.className = "katalog-card"; 
+                    kotakProduk.dataset.kategori = kategoriProduk; 
                     
-                    // PERBAIKAN: Masukkan kartuHtml ke dalam innerHTML kotakProduk!
                     kotakProduk.innerHTML = `
                         <img src="${data.gambar}" alt="${data.nama}" style="width: 100%; height: 200px; object-fit: contain; margin-bottom: 15px;">
+                        
+                        <span style="background: #eee; color: #555; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; width: fit-content; margin-bottom: 8px;">${kategoriProduk === 'Oli' ? 'Oli Kompresor' : (kategoriProduk === 'Sparepart' ? 'Sparepart' : (kategoriProduk === 'Mesin' ? 'Unit Mesin' : 'Olikom'))}</span>
+                        
                         <h3 style="font-size: 18px; color: #222; margin-bottom: 10px;">${data.nama}</h3>
                         
                         <p style="font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.5; flex-grow: 1;">${data.Deskripsi || data.deskripsi || ""}</p>
@@ -171,37 +182,48 @@
 
         tampilkanKatalog();
 
-        // Script Hamburger Menu
+        // Hamburger Menu
         const mobileMenu = document.getElementById('mobile-menu');
         const navLinks = document.querySelector('.nav-links');
-
         mobileMenu.addEventListener('click', () => {
             mobileMenu.classList.toggle('is-active');
             navLinks.classList.toggle('active');
         });
 
         // ==========================================
-        // FITUR PENCARIAN REAL-TIME (SUDAH DIPERBAIKI)
+        // FITUR PENCARIAN & FILTER KATEGORI GABUNGAN
         // ==========================================
         const inputCari = document.getElementById('inputCari');
+        const filterKategori = document.getElementById('filterKategori');
         
-        inputCari.addEventListener('keyup', function() {
+        // Fungsi gabungan: Menyaring berdasarkan Nama DAN Kategori sekaligus!
+        function saringProduk() {
             const kataKunci = inputCari.value.toLowerCase();
+            const pilihanKategori = filterKategori.value;
             
-            // Mengambil semua elemen dengan class 'katalog-card'
             const semuaProduk = document.querySelectorAll('.katalog-card');
 
             semuaProduk.forEach(produk => {
-                // Mengambil judul dari tag h3 di dalam kartu
                 const namaProduk = produk.querySelector('h3').innerText.toLowerCase();
+                const kategoriProduk = produk.dataset.kategori; // Ambil kategori yang kita simpan tadi
                 
-                if(namaProduk.includes(kataKunci)) {
-                    produk.style.display = 'flex'; // Kembalikan ke flex agar tidak merusak layout kartu
+                // Cek apakah namanya cocok?
+                const cocokNama = namaProduk.includes(kataKunci);
+                // Cek apakah kategorinya cocok? (Atau user milih "Semua")
+                const cocokKategori = (pilihanKategori === "Semua" || kategoriProduk === pilihanKategori);
+                
+                // Jika KEDUANYA cocok, tampilkan. Jika salah satu gagal, sembunyikan.
+                if(cocokNama && cocokKategori) {
+                    produk.style.display = 'flex';
                 } else {
                     produk.style.display = 'none';
                 }
             });
-        });
+        }
+
+        // Jalankan fungsi saringProduk kapanpun user mengetik ATAU mengganti dropdown kategori
+        inputCari.addEventListener('keyup', saringProduk);
+        filterKategori.addEventListener('change', saringProduk);
     </script>
 </body>
 </html>
