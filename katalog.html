@@ -125,23 +125,15 @@
                 querySnapshot.forEach((dokumen) => {
                     const data = dokumen.data();
                     const kotakProduk = document.createElement("div");
-                    kotakProduk.className = "product-card"; 
-                    
-                    kotakProduk.innerHTML = `
-                        <div class="product-image-container">
-                            <img src="${data.gambar}" alt="${data.nama}" class="product-img">
-                            
-                            <div class="product-overlay">
-                                <p class="product-desc">${data.deskripsi}</p>
-                                <a href="https://wa.me/6285727250080?text=Halo%20Admin%20Olikom,%20saya%20tertarik%20dengan%20${encodeURIComponent(data.nama)}" target="_blank" class="btn-pesan">Pesan via WA</a>
-                            </div>
-                        </div>
-                        
-                        <div class="product-info">
-                            <h3>${data.nama}</h3>
-                            <p class="product-price">${data.harga}</p>
-                        </div>
-                    `;
+                    const kartuHtml = `
+    <div class="katalog-card"> <img src="${data.gambar}" alt="${data.nama}">
+        <h3>${data.nama}</h3>
+        
+        <p style="font-size: 14px; color: #555; margin-bottom: 10px;">${data.Deskripsi || data.deskripsi || ""}</p>
+        
+        <p style="color: #FF8C00; font-weight: bold;">Hubungi Kami</p>
+    </div>
+`;
                     wadahKatalog.appendChild(kotakProduk);
                 });
 

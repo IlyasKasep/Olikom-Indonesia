@@ -74,9 +74,10 @@
 
         <form id="formTambahProduk">
             <div class="form-group"><label>Nama Produk / Oli</label><input type="text" id="inputNama" required></div>
-            <div class="form-group"><label>Harga</label><input type="text" id="inputHarga" placeholder="Opsional"></div>
-            <div class="form-group"><label>Link Foto (Tautan Langsung)</label><input type="url" id="inputGambar" required></div>
-            <div class="form-group"><label>Deskripsi Singkat</label><textarea id="inputDeskripsi" rows="2" required></textarea></div>
+            
+            <div class="form-group"><label>Deskripsi Produk</label><textarea id="inputDeskripsi" rows="3" required></textarea></div>
+            
+            <div class="form-group"><label>Link Foto</label><input type="url" id="inputGambar" required></div>
             <button type="submit" id="btnSimpanProduk">Simpan Produk Baru</button>
             <button type="button" id="btnBatalEditProduk" style="display: none; background-color: #6c757d;">Batal Edit</button>
         </form>
@@ -170,20 +171,29 @@
     // ==========================================
     async function muatDataProduk() {
         const tabel = document.getElementById('tabelProduk');
-        tabel.innerHTML = "<tr><td colspan='4'>Memuat...</td></tr>";
+        // Sesuaikan header tabel karena kolom harga sudah hilang
+        document.querySelector('#katalogTab thead').innerHTML = "<tr><th>Foto</th><th>Nama & Deskripsi</th><th>Aksi</th></tr>";
+        
+        tabel.innerHTML = "<tr><td colspan='3'>Memuat...</td></tr>";
         const snapshot = await getDocs(collection(db, "katalog_produk"));
         tabel.innerHTML = ""; 
-        if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='4'>Katalog kosong.</td></tr>";
+        if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='3'>Katalog kosong.</td></tr>";
         
         snapshot.forEach((dokumen) => {
             const data = dokumen.data();
             const tr = document.createElement("tr");
+            
+            // Ambil deskripsi (D besar atau d kecil)
+            const deskripsiProduk = data.Deskripsi || data.deskripsi || "";
+
             tr.innerHTML = `
                 <td><img src="${data.gambar}" class="img-preview"></td>
-                <td><strong>${data.nama}</strong></td>
-                <td>${data.harga}</td>
                 <td>
-                    <button class="btn-edit btn-edit-produk" data-id="${dokumen.id}" data-nama="${data.nama}" data-harga="${data.harga}" data-gambar="${data.gambar}" data-deskripsi="${data.deskripsi}">Edit</button>
+                    <strong>${data.nama}</strong><br>
+                    <span style="font-size: 13px; color: #666;">${deskripsiProduk}</span>
+                </td>
+                <td>
+                    <button class="btn-edit btn-edit-produk" data-id="${dokumen.id}" data-nama="${data.nama}" data-gambar="${data.gambar}" data-deskripsi="${deskripsiProduk}">Edit</button>
                     <button class="btn-hapus btn-hapus-produk" data-id="${dokumen.id}">Hapus</button>
                 </td>
             `;
@@ -197,9 +207,9 @@
         document.querySelectorAll('.btn-edit-produk').forEach(btn => btn.addEventListener('click', (e) => {
             const d = e.target.dataset;
             document.getElementById('inputNama').value = d.nama;
-            document.getElementById('inputHarga').value = d.harga;
             document.getElementById('inputGambar').value = d.gambar;
             document.getElementById('inputDeskripsi').value = d.deskripsi;
+            
             idEditProduk = d.id;
             document.getElementById('btnSimpanProduk').innerText = "Update Produk";
             document.getElementById('btnSimpanProduk').style.backgroundColor = "#28a745";
@@ -218,21 +228,35 @@
 
     document.getElementById('formTambahProduk').addEventListener('submit', async (e) => {
         e.preventDefault(); 
+        
+        // Ubah teks tombol agar admin tahu sedang proses
+        const btnSimpan = document.getElementById('btnSimpanProduk');
+        const teksAsli = btnSimpan.innerText;
+        btnSimpan.innerText = "Menyimpan...";
+        btnSimpan.disabled = true;
+
         const dataProduk = {
             nama: document.getElementById('inputNama').value,
-            harga: document.getElementById('inputHarga').value || "Hubungi Kami",
             gambar: document.getElementById('inputGambar').value,
-            deskripsi: document.getElementById('inputDeskripsi').value
+            Deskripsi: document.getElementById('inputDeskripsi').value // Pakai 'D' besar sesuai databasemu
         };
-        if (idEditProduk) {
-            await updateDoc(doc(db, "katalog_produk", idEditProduk), dataProduk);
-            alert("Produk diupdate!"); 
-        } else {
-            await addDoc(collection(db, "katalog_produk"), dataProduk);
-            alert("Produk ditambahkan!"); 
+
+        try {
+            if (idEditProduk) {
+                await updateDoc(doc(db, "katalog_produk", idEditProduk), dataProduk);
+                alert("Produk berhasil diupdate!"); 
+            } else {
+                await addDoc(collection(db, "katalog_produk"), dataProduk);
+                alert("Produk baru berhasil ditambahkan!"); 
+            }
+            document.getElementById('btnBatalEditProduk').click();
+            muatDataProduk();
+        } catch (error) {
+            alert("Terjadi kesalahan saat menyimpan: " + error.message);
+        } finally {
+            btnSimpan.innerText = teksAsli;
+            btnSimpan.disabled = false;
         }
-        document.getElementById('btnBatalEditProduk').click();
-        muatDataProduk();
     });
 
 
