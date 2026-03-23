@@ -9,6 +9,28 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Sedikit tambahan agar kartu produk tingginya sama rata dan rapi */
+        .katalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .katalog-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+        .katalog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(255, 193, 7, 0.2);
+        }
+    </style>
 </head>
 <body>
     <header class="navbar">
@@ -34,18 +56,18 @@
         </nav>
     </header>
     
-    <section class="katalog-page" id="katalog-full">
+    <section class="katalog-page" id="katalog-full" style="padding: 40px 8%; min-height: 60vh;">
         <div class="section-title">
-            <h2>Katalog Produk Lengkap</h2>
-            <p>Temukan spesifikasi oli kompresor yang paling tepat untuk kebutuhan mesin industri Anda.</p>
+            <h2 style="text-align: center; margin-bottom: 10px;">Katalog Produk Lengkap</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">Temukan spesifikasi oli kompresor yang paling tepat untuk kebutuhan mesin industri Anda.</p>
         </div>
 
-        <div class="search-container">
-            <input type="text" id="inputCari" placeholder="🔍 Cari nama oli atau produk di sini..." autocomplete="off">
+        <div class="search-container" style="max-width: 600px; margin: 0 auto 40px auto;">
+            <input type="text" id="inputCari" placeholder="🔍 Cari nama oli atau produk di sini..." autocomplete="off" style="width: 100%; padding: 12px 20px; border-radius: 30px; border: 1px solid #ccc; font-family: 'Poppins', sans-serif;">
         </div>
 
         <div class="katalog-grid" id="wadahKatalog">
-            <p style="text-align: center; width: 100%;">Sedang memuat produk...</p>
+            <p style="text-align: center; width: 100%; color: #888;">Sedang memuat produk...</p>
         </div>
     </section>
     
@@ -117,35 +139,39 @@
                 wadahKatalog.innerHTML = ""; 
 
                 if(querySnapshot.empty) {
-                    wadahKatalog.innerHTML = "<p style='text-align: center; width: 100%;'>Belum ada produk. Admin sedang menyiapkan stok.</p>";
+                    wadahKatalog.innerHTML = "<p style='text-align: center; width: 100%; grid-column: 1 / -1; color: #888;'>Belum ada produk. Admin sedang menyiapkan stok.</p>";
                     return;
                 }
 
-                // PERBAIKAN: Looping sekarang hanya jalan 1 kali saja
                 querySnapshot.forEach((dokumen) => {
                     const data = dokumen.data();
                     const kotakProduk = document.createElement("div");
-                    const kartuHtml = `
-    <div class="katalog-card"> <img src="${data.gambar}" alt="${data.nama}">
-        <h3>${data.nama}</h3>
-        
-        <p style="font-size: 14px; color: #555; margin-bottom: 10px;">${data.Deskripsi || data.deskripsi || ""}</p>
-        
-        <p style="color: #FF8C00; font-weight: bold;">Hubungi Kami</p>
-    </div>
-`;
+                    
+                    // Ini class CSS-nya agar dikenali oleh fitur pencarian
+                    kotakProduk.className = "katalog-card"; 
+                    
+                    // PERBAIKAN: Masukkan kartuHtml ke dalam innerHTML kotakProduk!
+                    kotakProduk.innerHTML = `
+                        <img src="${data.gambar}" alt="${data.nama}" style="width: 100%; height: 200px; object-fit: contain; margin-bottom: 15px;">
+                        <h3 style="font-size: 18px; color: #222; margin-bottom: 10px;">${data.nama}</h3>
+                        
+                        <p style="font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.5; flex-grow: 1;">${data.Deskripsi || data.deskripsi || ""}</p>
+                        
+                        <a href="https://wa.me/6285727250080?text=Halo%20Olikom,%20saya%20tertarik%20dengan%20produk%20${data.nama}" target="_blank" style="text-decoration: none; display: block; background: #FFC107; color: #222; padding: 10px; border-radius: 8px; font-weight: bold; text-align: center; transition: 0.3s; margin-top: auto;">Pesan via WA</a>
+                    `;
+                    
                     wadahKatalog.appendChild(kotakProduk);
                 });
 
             } catch (error) {
                 console.error("Error mengambil data: ", error);
-                wadahKatalog.innerHTML = "<p style='text-align: center; color: red; width: 100%;'>Gagal memuat katalog. Periksa koneksi internet.</p>";
+                wadahKatalog.innerHTML = "<p style='text-align: center; color: red; width: 100%; grid-column: 1 / -1;'>Gagal memuat katalog. Periksa koneksi internet.</p>";
             }
         }
 
         tampilkanKatalog();
 
-        // Script untuk Hamburger Menu
+        // Script Hamburger Menu
         const mobileMenu = document.getElementById('mobile-menu');
         const navLinks = document.querySelector('.nav-links');
 
@@ -155,32 +181,27 @@
         });
 
         // ==========================================
-        // FITUR PENCARIAN REAL-TIME
+        // FITUR PENCARIAN REAL-TIME (SUDAH DIPERBAIKI)
         // ==========================================
         const inputCari = document.getElementById('inputCari');
         
         inputCari.addEventListener('keyup', function() {
-            // 1. Ambil apa yang diketik user dan ubah ke huruf kecil semua
             const kataKunci = inputCari.value.toLowerCase();
             
-            // 2. Ambil semua kotak produk yang ada di layar
-            const semuaProduk = document.querySelectorAll('.product-card');
+            // Mengambil semua elemen dengan class 'katalog-card'
+            const semuaProduk = document.querySelectorAll('.katalog-card');
 
-            // 3. Cek satu per satu kotak produk
             semuaProduk.forEach(produk => {
-                // Ambil judul/nama produk dari dalam kotak
-                const namaProduk = produk.querySelector('.product-info h3').innerText.toLowerCase();
+                // Mengambil judul dari tag h3 di dalam kartu
+                const namaProduk = produk.querySelector('h3').innerText.toLowerCase();
                 
-                // Jika nama produk mengandung kata yang diketik, tampilkan! Jika tidak, sembunyikan!
                 if(namaProduk.includes(kataKunci)) {
-                    produk.style.display = 'block';
+                    produk.style.display = 'flex'; // Kembalikan ke flex agar tidak merusak layout kartu
                 } else {
                     produk.style.display = 'none';
                 }
             });
         });
-
-
     </script>
 </body>
 </html>
