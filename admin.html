@@ -3,126 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Olikom - Kelola Konten</title>
+    <title>Admin Panel - Olikom Indonesia</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Quill.js CSS untuk Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2, h3 { color: #333; text-align: center; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #0056b3; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; }
-        button:hover { background-color: #004494; }
-        button:disabled { background-color: #cccccc; cursor: not-allowed; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        table, th, td { border: 1px solid #ddd; }
-        th, td { padding: 12px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        
-        .btn-edit { background-color: #ffc107; color: #333; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 5px; width: auto; font-weight: bold;}
-        .btn-edit:hover { background-color: #e0a800; }
-        .btn-hapus { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; width: auto; font-size: 14px; margin: 0; font-weight: bold;}
-        .btn-hapus:hover { background-color: #c82333; }
-        .btn-logout { background-color: #6c757d; width: auto; float: right; padding: 8px 15px; font-size: 14px; margin-top: -40px;}
-        .btn-logout:hover { background-color: #5a6268; }
-        
-        #adminPanel { display: none; }
-        #loginPanel { max-width: 400px; }
-        .img-preview { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; }
-        
-        /* --- GAYA UNTUK TAB MENU (PENTING) --- */
-        .tab-container { display: flex; justify-content: center; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab-btn { background: none; border: none; color: #555; padding: 10px 20px; cursor: pointer; font-size: 16px; font-weight: bold; width: auto; border-bottom: 3px solid transparent; border-radius: 0; }
-        .tab-btn:hover { color: #0056b3; }
-        .tab-btn.active { color: #0056b3; border-bottom-color: #0056b3; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        /* -------------------------------------- */
+        /* --- TEMA WARNA & TIPOGRAFI --- */
+        :root {
+            --gold: #D4AF37; 
+            --gold-hover: #b5952f;
+            --gold-light: #fbf5e6;
+            --dark: #1a1a1a;
+            --dark-gray: #333333;
+            --gray: #888888;
+            --light-bg: #f4f6f9;
+            --white: #ffffff;
+            --danger: #e74c3c;
+            --danger-hover: #c0392b;
+        }
 
-        .instruksi-box { background-color: #FFFDF2; border: 2px dashed #FFC107; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; color: #333; }
-        .instruksi-box h4 { color: #FF8C00; margin-top: 0; margin-bottom: 10px; font-size: 16px; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--light-bg); 
+            color: var(--dark-gray);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* --- KOTAK UTAMA (CONTAINER) --- */
+        .container { 
+            width: 100%;
+            max-width: 1000px; 
+            background: var(--white); 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05); 
+            border-top: 6px solid var(--gold);
+            margin-top: 20px;
+        }
+
+        #loginPanel { max-width: 450px; margin-top: 80px; text-align: center; }
+        #loginPanel h2 { margin-bottom: 30px; color: var(--dark); font-weight: 700; }
+        
+        h2 { color: var(--dark); font-weight: 700; margin-top: 0; }
+        h3 { color: var(--dark); font-weight: 600; border-bottom: 2px solid var(--gold-light); padding-bottom: 10px; margin-top: 30px;}
+
+        /* --- FORM & INPUT --- */
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { 
+            display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark-gray); font-size: 14px;
+        }
+        .form-group input, .form-group select { 
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; 
+            box-sizing: border-box; font-family: 'Poppins', sans-serif; font-size: 14px; background-color: #fafafa;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--gold); outline: none; box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15); background-color: var(--white);
+        }
+
+        /* --- CUSTOM QUILL EDITOR (MENYESUAIKAN TEMA) --- */
+        .ql-toolbar.ql-snow { border-color: #ddd; border-radius: 8px 8px 0 0; background-color: #fafafa; font-family: 'Poppins', sans-serif; }
+        .ql-container.ql-snow { border-color: #ddd; border-radius: 0 0 8px 8px; background-color: #fafafa; font-family: 'Poppins', sans-serif; font-size: 14px;}
+        .ql-editor { min-height: 120px; }
+        .ql-editor:focus { background-color: var(--white); }
+        .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active {
+            color: var(--gold);
+        }
+        .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button:hover .ql-stroke, .ql-snow.ql-toolbar button.ql-active .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+            stroke: var(--gold);
+        }
+        .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button:hover .ql-fill, .ql-snow.ql-toolbar button.ql-active .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill {
+            fill: var(--gold);
+        }
+
+        /* --- TOMBOL --- */
+        button { font-family: 'Poppins', sans-serif; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        
+        button[type="submit"], #btnLogin { 
+            width: 100%; padding: 14px; background-color: var(--gold); color: var(--white); font-size: 16px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        button[type="submit"]:hover, #btnLogin:hover { background-color: var(--gold-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); }
+        button[type="submit"]:disabled { background-color: #e0e0e0; color: #999; box-shadow: none; cursor: not-allowed; transform: none; }
+
+        .btn-logout { background-color: var(--dark); color: var(--white); padding: 8px 20px; font-size: 14px; float: right; margin-top: -50px; }
+        .btn-logout:hover { background-color: #000; }
+        .btn-edit { background-color: var(--dark-gray); color: var(--gold); padding: 8px 15px; font-size: 13px; margin-right: 5px; }
+        .btn-edit:hover { background-color: var(--dark); color: var(--white); }
+        .btn-hapus { background-color: var(--danger); color: white; padding: 8px 15px; font-size: 13px; }
+        .btn-hapus:hover { background-color: var(--danger-hover); }
+        #btnBatalEditProduk, #btnBatalEditArtikel { width: 100%; padding: 12px; margin-top: 10px; color: var(--white); }
+
+        /* --- TAB & TABEL --- */
+        .tab-container { display: flex; justify-content: center; margin-bottom: 30px; border-bottom: 2px solid #eee; gap: 20px; }
+        .tab-btn { background: none; color: var(--gray); padding: 12px 25px; font-size: 16px; border-bottom: 3px solid transparent; border-radius: 0; }
+        .tab-btn:hover { color: var(--gold); }
+        .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: var(--gold-light); color: var(--dark); font-weight: 600; text-transform: uppercase; font-size: 13px;}
+        tr:hover { background-color: #fdfdfd; }
+        .img-preview { width: 70px; height: 70px; object-fit: contain; border-radius: 8px; border: 1px solid #eee; background: #fff; padding: 5px;}
+        
+        .instruksi-box { background-color: var(--gold-light); border-left: 4px solid var(--gold); padding: 15px 20px; border-radius: 0 8px 8px 0; margin-bottom: 25px; font-size: 14px; color: var(--dark-gray); }
+        .instruksi-box h4 { color: var(--gold-hover); margin-top: 0; margin-bottom: 8px; font-size: 16px; }
+        #adminPanel { display: none; }
+        .badge-kategori { background: var(--gold); color: var(--white); padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: 8px; display: inline-block; vertical-align: middle; }
     </style>
 </head>
 <body>
 
+<!-- PANEL LOGIN -->
 <div class="container" id="loginPanel">
-    <h2>🔐 Login Admin Olikom</h2>
+    <div style="margin-bottom: 20px;">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+    </div>
+    <h2>Olikom Admin Area</h2>
     <form id="formLogin">
-        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" required></div>
-        <div class="form-group"><label>Password</label><input type="password" id="loginPassword" required></div>
-        <button type="submit" id="btnLogin">Masuk</button>
-        <p id="pesanError" style="color: red; text-align: center; font-size: 14px; display: none;">Email/Password salah!</p>
+        <div class="form-group"><label>Alamat Email</label><input type="email" id="loginEmail" placeholder="admin@olikom.com" required></div>
+        <div class="form-group"><label>Kata Sandi</label><input type="password" id="loginPassword" placeholder="••••••••" required></div>
+        <button type="submit" id="btnLogin">Masuk ke Sistem</button>
+        <p id="pesanError" style="color: var(--danger); text-align: center; font-size: 14px; display: none; margin-top: 15px; font-weight: 500;">❌ Email atau Password tidak sesuai!</p>
     </form>
 </div>
 
+<!-- PANEL ADMIN -->
 <div class="container" id="adminPanel">
-    <h2>🛠️ Panel Admin Olikom</h2>
-    <button class="btn-logout" id="btnLogout">Keluar</button>
+    <h2 style="color: var(--gold);"><span style="color: var(--dark);">Olikom</span> Workspace</h2>
+    <button class="btn-logout" id="btnLogout">🚪 Keluar</button>
     
-    <hr style="margin: 30px 0; clear: both;">
-
-    <div class="tab-container">
-        <button class="tab-btn active" onclick="bukaTab(event, 'katalogTab')">📦 Kelola Katalog Produk</button>
-        <button class="tab-btn" onclick="bukaTab(event, 'artikelTab')">📝 Kelola Artikel Konten</button>
+    <div class="tab-container" style="margin-top: 30px;">
+        <button class="tab-btn active" onclick="bukaTab(event, 'katalogTab')">📦 Katalog Produk</button>
+        <button class="tab-btn" onclick="bukaTab(event, 'artikelTab')">📝 Artikel & Blog</button>
     </div>
 
+    <!-- TAB KATALOG PRODUK -->
     <div id="katalogTab" class="tab-content active">
         <div class="instruksi-box">
-            <h4>📌 Info Upload Foto Produk:</h4>
-            Gunakan Tautan Langsung (Direct Link) dari <b><a href="https://postimages.org/" target="_blank">Postimages.org</a></b> atau <b>ImgBB</b>.
+            <h4>Panduan Unggah Foto & Deskripsi</h4>
+            Gunakan <b><a href="https://imgbb.com/" target="_blank" style="color: var(--dark);">ImgBB</a></b> untuk tautan foto. Anda sekarang dapat menebalkan tulisan (<b>B</b>), memiringkan (<i>I</i>), dan menggarisbawahi (<u>U</u>) pada deskripsi!
         </div>
 
         <form id="formTambahProduk">
-            <div class="form-group"><label>Nama Produk / Oli</label><input type="text" id="inputNama" required></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label>Nama Produk / Oli</label>
+                    <input type="text" id="inputNama" placeholder="Contoh: Oli Kompresor Screw 46" required>
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select id="inputKategori" required>
+                        <option value="" disabled selected>-- Pilih Kategori --</option>
+                        <option value="Oli">Oli Kompresor</option>
+                        <option value="Sparepart">Sparepart / Filter</option>
+                        <option value="Mesin">Unit Mesin</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- GANTI TEXTAREA DENGAN DIV UNTUK QUILL -->
+            <div class="form-group">
+                <label>Deskripsi Singkat</label>
+                <div id="editorDeskripsi"></div>
+            </div>
             
             <div class="form-group">
-                <label>Kategori Produk</label>
-                <select id="inputKategori" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; cursor: pointer;" required>
-                    <option value="" disabled selected>-- Pilih Kategori --</option>
-                    <option value="Oli">Oli Kompresor</option>
-                    <option value="Sparepart">Sparepart / Filter</option>
-                    <option value="Mesin">Unit Mesin</option>
-                </select>
+                <label>Link Foto (Tautan Langsung / Direct Link)</label>
+                <input type="url" id="inputGambar" placeholder="https://i.ibb.co/..." required>
             </div>
-            <div class="form-group"><label>Deskripsi Singkat</label><textarea id="inputDeskripsi" rows="2" required></textarea></div>
-            <div class="form-group"><label>Link Foto (Tautan Langsung)</label><input type="url" id="inputGambar" required></div>
             
-            <button type="submit" id="btnSimpanProduk">Simpan Produk Baru</button>
-            <button type="button" id="btnBatalEditProduk" style="display: none; background-color: #6c757d;">Batal Edit</button>
+            <button type="submit" id="btnSimpanProduk">Simpan Produk ke Katalog</button>
+            <button type="button" id="btnBatalEditProduk" style="display: none; background-color: var(--gray);">Batalkan Perubahan</button>
         </form>
 
-        <hr style="margin: 40px 0;">
-        <h3>Daftar Produk Saat Ini</h3>
-        <table>
-            <thead><tr><th>Foto</th><th>Nama Produk</th><th>Harga</th><th>Aksi</th></tr></thead>
-            <tbody id="tabelProduk"><tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr></tbody>
-        </table>
+        <h3>Manajemen Produk</h3>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead id="headProduk">
+                    <tr><th width="100px">Foto</th><th>Rincian Produk</th><th width="180px">Aksi</th></tr>
+                </thead>
+                <tbody id="tabelProduk">
+                    <tr><td colspan="3" style="text-align: center; color: var(--gray);">Sedang mengambil data dari server...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <!-- TAB ARTIKEL -->
     <div id="artikelTab" class="tab-content">
-        <div class="instruksi-box" style="border-color: #17a2b8; background-color: #f8fdfd;">
-            <h4 style="color: #17a2b8;">📌 Tulis Artikel Baru:</h4>
-            Artikel ini akan langsung muncul di halaman beranda (index.html) tepat di bawah produk Best Seller.
+        <div class="instruksi-box" style="border-left-color: var(--dark); background-color: #f9f9f9;">
+            <h4 style="color: var(--dark);">Panduan Artikel</h4>
+            Gunakan alat teks (Bold, Italic, Bullet point) agar artikel Anda terlihat lebih profesional dan mudah dibaca pengunjung.
         </div>
 
         <form id="formTambahArtikel">
-            <div class="form-group"><label>Judul Artikel</label><input type="text" id="inputJudulArtikel" placeholder="Contoh: Manfaat Mengganti Oli Kompresor Tepat Waktu" required></div>
-            <div class="form-group"><label>Link Gambar Sampul Artikel</label><input type="url" id="inputGambarArtikel" placeholder="Gunakan link ImgBB/Postimages" required></div>
-            <div class="form-group"><label>Isi Artikel (Paragraf)</label><textarea id="inputIsiArtikel" rows="8" placeholder="Tulis cerita atau tips di sini..." required></textarea></div>
-            <button type="submit" id="btnSimpanArtikel">Terbitkan Artikel Baru</button>
-            <button type="button" id="btnBatalEditArtikel" style="display: none; background-color: #6c757d;">Batal Edit</button>
+            <div class="form-group">
+                <label>Judul Artikel</label>
+                <input type="text" id="inputJudulArtikel" placeholder="Contoh: Kapan Waktu Terbaik Mengganti Oli Kompresor?" required>
+            </div>
+            <div class="form-group">
+                <label>Link Gambar Sampul</label>
+                <input type="url" id="inputGambarArtikel" placeholder="Gunakan link ImgBB/Postimages" required>
+            </div>
+            
+            <!-- GANTI TEXTAREA DENGAN DIV UNTUK QUILL -->
+            <div class="form-group">
+                <label>Isi Konten Artikel</label>
+                <div id="editorArtikel"></div>
+            </div>
+
+            <button type="submit" id="btnSimpanArtikel">Terbitkan Artikel</button>
+            <button type="button" id="btnBatalEditArtikel" style="display: none; background-color: var(--gray);">Batalkan Perubahan</button>
         </form>
 
-        <hr style="margin: 40px 0;">
-        <h3>Daftar Artikel Saat Ini</h3>
-        <table>
-            <thead><tr><th>Sampul</th><th>Judul Artikel</th><th>Tanggal</th><th>Aksi</th></tr></thead>
-            <tbody id="tabelArtikel"><tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr></tbody>
-        </table>
+        <h3>Manajemen Artikel</h3>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr><th width="100px">Sampul</th><th>Judul & Tanggal</th><th width="180px">Aksi</th></tr>
+                </thead>
+                <tbody id="tabelArtikel">
+                    <tr><td colspan="3" style="text-align: center; color: var(--gray);">Sedang mengambil data dari server...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
 </div>
 
+<!-- SCRIPT PENGATUR TAB -->
 <script>
     function bukaTab(event, namaTab) {
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -132,6 +251,32 @@
     }
 </script>
 
+<!-- QUILL.JS SCRIPT -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    // Konfigurasi alat-alat yang muncul di editor
+    var toolbarOptions = [
+        ['bold', 'italic', 'underline'],        // Tebal, miring, garis bawah
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }], // List angka & titik
+        [{ 'header': [1, 2, 3, false] }]        // Ukuran judul
+    ];
+
+    // Inisialisasi Editor untuk Deskripsi Produk
+    var quillDeskripsi = new Quill('#editorDeskripsi', {
+        theme: 'snow',
+        modules: { toolbar: toolbarOptions },
+        placeholder: 'Tuliskan keunggulan atau spesifikasi singkat produk...'
+    });
+
+    // Inisialisasi Editor untuk Isi Artikel
+    var quillArtikel = new Quill('#editorArtikel', {
+        theme: 'snow',
+        modules: { toolbar: toolbarOptions },
+        placeholder: 'Tulis edukasi, tips, atau berita perusahaan di sini...'
+    });
+</script>
+
+<!-- SCRIPT FIREBASE & LOGIC -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -153,13 +298,11 @@
     let idEditProduk = null; 
     let idEditArtikel = null;
 
-    // --- KEAMANAN LOGIN ---
     onAuthStateChanged(auth, (user) => {
         if (user) { 
             document.getElementById('loginPanel').style.display = "none"; 
             document.getElementById('adminPanel').style.display = "block"; 
-            muatDataProduk(); 
-            muatDataArtikel(); 
+            muatDataProduk(); muatDataArtikel(); 
         } else { 
             document.getElementById('loginPanel').style.display = "block"; 
             document.getElementById('adminPanel').style.display = "none"; 
@@ -168,184 +311,198 @@
 
     document.getElementById('formLogin').addEventListener('submit', (e) => {
         e.preventDefault();
+        const btnLogin = document.getElementById('btnLogin');
+        btnLogin.innerText = "Memeriksa..."; btnLogin.disabled = true;
         signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)
-            .then(() => document.getElementById('formLogin').reset())
-            .catch(() => document.getElementById('pesanError').style.display = "block");
+            .then(() => { document.getElementById('formLogin').reset(); document.getElementById('pesanError').style.display = "none"; })
+            .catch(() => { document.getElementById('pesanError').style.display = "block"; })
+            .finally(() => { btnLogin.innerText = "Masuk ke Sistem"; btnLogin.disabled = false; });
     });
+    
     document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
 
-
     // ==========================================
-    // BAGIAN 1: KODE PRODUK (DENGAN KATEGORI & DESKRIPSI)
+    // FUNGSI PRODUK
     // ==========================================
     async function muatDataProduk() {
         const tabel = document.getElementById('tabelProduk');
-        document.querySelector('#katalogTab thead').innerHTML = "<tr><th>Foto</th><th>Nama, Kategori & Deskripsi</th><th>Aksi</th></tr>";
+        tabel.innerHTML = "<tr><td colspan='3' style='text-align:center;'>Memuat data produk...</td></tr>";
         
-        tabel.innerHTML = "<tr><td colspan='3'>Memuat...</td></tr>";
-        const snapshot = await getDocs(collection(db, "katalog_produk"));
-        tabel.innerHTML = ""; 
-        if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='3'>Katalog kosong.</td></tr>";
-        
-        snapshot.forEach((dokumen) => {
-            const data = dokumen.data();
-            const tr = document.createElement("tr");
+        try {
+            const snapshot = await getDocs(collection(db, "katalog_produk"));
+            tabel.innerHTML = ""; 
+            if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='3' style='text-align:center;'>Katalog masih kosong.</td></tr>";
             
-            const deskripsiProduk = data.Deskripsi || data.deskripsi || "";
-            const kategoriProduk = data.kategori || "Belum ada kategori"; // Ambil kategori
+            snapshot.forEach((dokumen) => {
+                const data = dokumen.data();
+                const tr = document.createElement("tr");
+                const deskripsiProduk = data.Deskripsi || data.deskripsi || "";
+                const kategoriProduk = data.kategori || "Tanpa Kategori";
 
-            tr.innerHTML = `
-                <td><img src="${data.gambar}" class="img-preview"></td>
-                <td>
-                    <strong>${data.nama}</strong> 
-                    <span style="background: #FFC107; color: #222; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-left: 5px;">${kategoriProduk}</span><br>
-                    <span style="font-size: 13px; color: #666;">${deskripsiProduk}</span>
-                </td>
-                <td>
-                    <button class="btn-edit btn-edit-produk" data-id="${dokumen.id}" data-nama="${data.nama}" data-gambar="${data.gambar}" data-deskripsi="${deskripsiProduk}" data-kategori="${kategoriProduk}">Edit</button>
-                    <button class="btn-hapus btn-hapus-produk" data-id="${dokumen.id}">Hapus</button>
-                </td>
-            `;
-            tabel.appendChild(tr);
-        });
+                // Menambahkan data base64/HTML ke atribut data (untuk edit) sangat riskan rusak, 
+                // lebih baik kita simpan HTML-nya dalam div tersembunyi
+                tr.innerHTML = `
+                    <td><img src="${data.gambar}" class="img-preview" alt="Foto"></td>
+                    <td>
+                        <strong style="font-size: 15px; color: var(--dark);">${data.nama}</strong> 
+                        <span class="badge-kategori">${kategoriProduk}</span><br>
+                        <div style="font-size: 13px; color: var(--gray); display: block; margin-top: 5px; line-height: 1.4;">${deskripsiProduk}</div>
+                        <!-- Elemen sembunyi untuk nyimpan data raw HTML -->
+                        <div class="raw-html" style="display:none;">${deskripsiProduk}</div>
+                    </td>
+                    <td>
+                        <button class="btn-edit btn-edit-produk" data-id="${dokumen.id}" data-nama="${data.nama}" data-gambar="${data.gambar}" data-kategori="${kategoriProduk}">Ubah</button>
+                        <button class="btn-hapus btn-hapus-produk" data-id="${dokumen.id}">Hapus</button>
+                    </td>
+                `;
+                tabel.appendChild(tr);
+            });
 
-        document.querySelectorAll('.btn-hapus-produk').forEach(btn => btn.addEventListener('click', async (e) => {
-            if(confirm('Hapus produk ini?')) { await deleteDoc(doc(db, "katalog_produk", e.target.dataset.id)); muatDataProduk(); }
-        }));
+            document.querySelectorAll('.btn-hapus-produk').forEach(btn => btn.addEventListener('click', async (e) => {
+                if(confirm('Yakin ingin menghapus produk ini?')) { await deleteDoc(doc(db, "katalog_produk", e.target.dataset.id)); muatDataProduk(); }
+            }));
 
-        document.querySelectorAll('.btn-edit-produk').forEach(btn => btn.addEventListener('click', (e) => {
-            const d = e.target.dataset;
-            document.getElementById('inputNama').value = d.nama;
-            document.getElementById('inputGambar').value = d.gambar;
-            document.getElementById('inputDeskripsi').value = d.deskripsi;
-            
-            // Set kategori di dropdown saat mode edit
-            const dropdownKategori = document.getElementById('inputKategori');
-            if(dropdownKategori) {
-                dropdownKategori.value = d.kategori === "Belum ada kategori" ? "" : d.kategori;
-            }
-            
-            idEditProduk = d.id;
-            document.getElementById('btnSimpanProduk').innerText = "Update Produk";
-            document.getElementById('btnSimpanProduk').style.backgroundColor = "#28a745";
-            document.getElementById('btnBatalEditProduk').style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }));
+            document.querySelectorAll('.btn-edit-produk').forEach(btn => btn.addEventListener('click', (e) => {
+                const d = e.target.dataset;
+                const rawHtml = e.target.closest('tr').querySelector('.raw-html').innerHTML; // Ambil HTML aslinya
+
+                document.getElementById('inputNama').value = d.nama;
+                document.getElementById('inputGambar').value = d.gambar;
+                document.getElementById('inputKategori').value = (d.kategori === "Tanpa Kategori") ? "" : d.kategori;
+                
+                // Masukkan teks berformat ke dalam editor Quill
+                quillDeskripsi.root.innerHTML = rawHtml;
+                
+                idEditProduk = d.id;
+                const btnSimpan = document.getElementById('btnSimpanProduk');
+                btnSimpan.innerText = "💾 Simpan Perubahan Produk"; btnSimpan.style.backgroundColor = "#27ae60";
+                document.getElementById('btnBatalEditProduk').style.display = "block"; window.scrollTo({ top: 0, behavior: 'smooth' });
+            }));
+        } catch(e) { console.error(e); }
     }
 
     document.getElementById('btnBatalEditProduk').addEventListener('click', () => {
         document.getElementById('formTambahProduk').reset();
+        quillDeskripsi.setContents([]); // Kosongkan editor
         idEditProduk = null;
-        document.getElementById('btnSimpanProduk').innerText = "Simpan Produk Baru";
-        document.getElementById('btnSimpanProduk').style.backgroundColor = "#0056b3";
+        const btnSimpan = document.getElementById('btnSimpanProduk');
+        btnSimpan.innerText = "Simpan Produk ke Katalog"; btnSimpan.style.backgroundColor = "var(--gold)";
         document.getElementById('btnBatalEditProduk').style.display = "none";
     });
 
     document.getElementById('formTambahProduk').addEventListener('submit', async (e) => {
         e.preventDefault(); 
         
+        // Ambil isi HTML dari editor Quill
+        const isiDeskripsi = quillDeskripsi.root.innerHTML;
+        if(quillDeskripsi.getText().trim().length === 0) {
+            alert("Deskripsi produk tidak boleh kosong!"); return;
+        }
+
         const btnSimpan = document.getElementById('btnSimpanProduk');
-        const teksAsli = btnSimpan.innerText;
-        btnSimpan.innerText = "Menyimpan...";
-        btnSimpan.disabled = true;
+        const teksAsli = btnSimpan.innerText; btnSimpan.innerText = "Menyimpan..."; btnSimpan.disabled = true;
 
         const dataProduk = {
             nama: document.getElementById('inputNama').value,
             gambar: document.getElementById('inputGambar').value,
-            Deskripsi: document.getElementById('inputDeskripsi').value,
-            kategori: document.getElementById('inputKategori').value // Simpan data kategori
+            Deskripsi: isiDeskripsi, // Simpan format HTML
+            kategori: document.getElementById('inputKategori').value 
         };
 
         try {
-            if (idEditProduk) {
-                await updateDoc(doc(db, "katalog_produk", idEditProduk), dataProduk);
-                alert("Produk berhasil diupdate!"); 
-            } else {
-                await addDoc(collection(db, "katalog_produk"), dataProduk);
-                alert("Produk baru berhasil ditambahkan!"); 
-            }
-            document.getElementById('btnBatalEditProduk').click();
-            muatDataProduk();
-        } catch (error) {
-            alert("Terjadi kesalahan saat menyimpan: " + error.message);
-        } finally {
-            btnSimpan.innerText = teksAsli;
-            btnSimpan.disabled = false;
-        }
+            if (idEditProduk) { await updateDoc(doc(db, "katalog_produk", idEditProduk), dataProduk); alert("Perubahan disimpan!"); } 
+            else { await addDoc(collection(db, "katalog_produk"), dataProduk); alert("Produk ditambahkan!"); }
+            document.getElementById('btnBatalEditProduk').click(); muatDataProduk();
+        } catch (error) { alert("Error: " + error.message); } 
+        finally { btnSimpan.innerText = teksAsli; btnSimpan.disabled = false; }
     });
 
-
     // ==========================================
-    // BAGIAN 2: KODE ARTIKEL BLOG
+    // FUNGSI ARTIKEL
     // ==========================================
     async function muatDataArtikel() {
         const tabel = document.getElementById('tabelArtikel');
-        tabel.innerHTML = "<tr><td colspan='4'>Memuat...</td></tr>";
-        const snapshot = await getDocs(collection(db, "artikel_blog"));
-        tabel.innerHTML = ""; 
-        if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='4'>Artikel kosong.</td></tr>";
+        tabel.innerHTML = "<tr><td colspan='3' style='text-align:center;'>Memuat artikel...</td></tr>";
         
-        snapshot.forEach((dokumen) => {
-            const data = dokumen.data();
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td><img src="${data.gambar}" class="img-preview"></td>
-                <td><strong>${data.judul}</strong></td>
-                <td>${data.tanggal}</td>
-                <td>
-                    <button class="btn-edit btn-edit-artikel" data-id="${dokumen.id}" data-judul="${data.judul}" data-gambar="${data.gambar}" data-isi="${data.isi}">Edit</button>
-                    <button class="btn-hapus btn-hapus-artikel" data-id="${dokumen.id}">Hapus</button>
-                </td>
-            `;
-            tabel.appendChild(tr);
-        });
+        try {
+            const snapshot = await getDocs(collection(db, "artikel_blog"));
+            tabel.innerHTML = ""; 
+            if(snapshot.empty) return tabel.innerHTML = "<tr><td colspan='3' style='text-align:center;'>Belum ada artikel.</td></tr>";
+            
+            snapshot.forEach((dokumen) => {
+                const data = dokumen.data();
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><img src="${data.gambar}" class="img-preview" alt="Sampul"></td>
+                    <td>
+                        <strong style="font-size: 15px; color: var(--dark);">${data.judul}</strong><br>
+                        <span style="font-size: 12px; color: var(--gray);">📅 ${data.tanggal}</span>
+                        <div class="raw-html-artikel" style="display:none;">${data.isi}</div>
+                    </td>
+                    <td>
+                        <button class="btn-edit btn-edit-artikel" data-id="${dokumen.id}" data-judul="${data.judul}" data-gambar="${data.gambar}">Ubah</button>
+                        <button class="btn-hapus btn-hapus-artikel" data-id="${dokumen.id}">Hapus</button>
+                    </td>
+                `;
+                tabel.appendChild(tr);
+            });
 
-        document.querySelectorAll('.btn-hapus-artikel').forEach(btn => btn.addEventListener('click', async (e) => {
-            if(confirm('Hapus artikel ini?')) { await deleteDoc(doc(db, "artikel_blog", e.target.dataset.id)); muatDataArtikel(); }
-        }));
+            document.querySelectorAll('.btn-hapus-artikel').forEach(btn => btn.addEventListener('click', async (e) => {
+                if(confirm('Hapus artikel ini permanen?')) { await deleteDoc(doc(db, "artikel_blog", e.target.dataset.id)); muatDataArtikel(); }
+            }));
 
-        document.querySelectorAll('.btn-edit-artikel').forEach(btn => btn.addEventListener('click', (e) => {
-            const d = e.target.dataset;
-            document.getElementById('inputJudulArtikel').value = d.judul;
-            document.getElementById('inputGambarArtikel').value = d.gambar;
-            document.getElementById('inputIsiArtikel').value = d.isi;
-            idEditArtikel = d.id;
-            document.getElementById('btnSimpanArtikel').innerText = "Update Artikel";
-            document.getElementById('btnSimpanArtikel').style.backgroundColor = "#28a745";
-            document.getElementById('btnBatalEditArtikel').style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }));
+            document.querySelectorAll('.btn-edit-artikel').forEach(btn => btn.addEventListener('click', (e) => {
+                const d = e.target.dataset;
+                const rawHtml = e.target.closest('tr').querySelector('.raw-html-artikel').innerHTML;
+
+                document.getElementById('inputJudulArtikel').value = d.judul;
+                document.getElementById('inputGambarArtikel').value = d.gambar;
+                quillArtikel.root.innerHTML = rawHtml; // Masukkan format HTML ke editor artikel
+
+                idEditArtikel = d.id;
+                const btnSimpan = document.getElementById('btnSimpanArtikel');
+                btnSimpan.innerText = "💾 Simpan Perubahan Artikel"; btnSimpan.style.backgroundColor = "#27ae60";
+                document.getElementById('btnBatalEditArtikel').style.display = "block"; window.scrollTo({ top: 0, behavior: 'smooth' });
+            }));
+        } catch(e) { console.error(e); }
     }
 
     document.getElementById('btnBatalEditArtikel').addEventListener('click', () => {
         document.getElementById('formTambahArtikel').reset();
+        quillArtikel.setContents([]); // Kosongkan editor
         idEditArtikel = null;
-        document.getElementById('btnSimpanArtikel').innerText = "Terbitkan Artikel Baru";
-        document.getElementById('btnSimpanArtikel').style.backgroundColor = "#0056b3";
+        const btnSimpan = document.getElementById('btnSimpanArtikel');
+        btnSimpan.innerText = "Terbitkan Artikel"; btnSimpan.style.backgroundColor = "var(--gold)";
         document.getElementById('btnBatalEditArtikel').style.display = "none";
     });
 
     document.getElementById('formTambahArtikel').addEventListener('submit', async (e) => {
         e.preventDefault(); 
+        
+        const isiArtikelHtml = quillArtikel.root.innerHTML;
+        if(quillArtikel.getText().trim().length === 0) {
+            alert("Isi artikel tidak boleh kosong!"); return;
+        }
+
+        const btnSimpan = document.getElementById('btnSimpanArtikel');
+        const teksAsli = btnSimpan.innerText; btnSimpan.innerText = "Menerbitkan..."; btnSimpan.disabled = true;
+
         const date = new Date();
         const tanggalHariIni = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
         const dataArtikel = {
             judul: document.getElementById('inputJudulArtikel').value,
             gambar: document.getElementById('inputGambarArtikel').value,
-            isi: document.getElementById('inputIsiArtikel').value,
+            isi: isiArtikelHtml, // Simpan sebagai format HTML
             tanggal: tanggalHariIni 
         };
 
-        if (idEditArtikel) {
-            await updateDoc(doc(db, "artikel_blog", idEditArtikel), dataArtikel);
-            alert("Artikel diupdate!"); 
-        } else {
-            await addDoc(collection(db, "artikel_blog"), dataArtikel);
-            alert("Artikel berhasil diterbitkan!"); 
-        }
-        document.getElementById('btnBatalEditArtikel').click();
-        muatDataArtikel();
+        try {
+            if (idEditArtikel) { await updateDoc(doc(db, "artikel_blog", idEditArtikel), dataArtikel); alert("Perubahan disimpan!"); } 
+            else { await addDoc(collection(db, "artikel_blog"), dataArtikel); alert("Artikel diterbitkan!"); }
+            document.getElementById('btnBatalEditArtikel').click(); muatDataArtikel();
+        } catch(error) { alert("Error: " + error.message); } 
+        finally { btnSimpan.innerText = teksAsli; btnSimpan.disabled = false; }
     });
 </script>
 </body>
